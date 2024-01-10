@@ -1,0 +1,18 @@
+server:
+  port: 8070
+  error:
+    include-message: always
+    whitelabel:
+      enabled: false
+    path: /error
+spring:
+  application:
+    name: "boilerplate-server"
+  profiles:
+    active: "prod"
+  main:
+    web-application-type: servlet
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smosky
+    username: loctran
+    password: Loc123456
