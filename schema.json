@@ -7,7 +7,7 @@
         "spring.main.web-application-type":""
     },
     "create-entity":true,
-    "entitties":[
+    "entities":[
         {
             "name":"User",
             "schema":{
