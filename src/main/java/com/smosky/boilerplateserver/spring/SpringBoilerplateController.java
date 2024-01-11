@@ -76,12 +76,19 @@ public class SpringBoilerplateController {
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
+        /* Write .zip file from start.spring.io to folder */
         Files.write(Path.of("my-project"+".zip"), responseBody);
+
+        /* Extract .zip file */
         ZipFile zipFile = new ZipFile("my-project.zip");
         zipFile.extractAll("extract-project");
 
-        File file = new File("extract-project/src/main/resources/application.properties");
+        /*
+        * Validate value
+        * */
 
+       /* Write config to application.properties */
+        File file = new File("extract-project/src/main/resources/application.properties");
         writeArrayListToFile(dependency.getProperties(),file.toPath().toString());
 
         System.out.println("file existed:" + file);
