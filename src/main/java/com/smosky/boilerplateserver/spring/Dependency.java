@@ -7,25 +7,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SpringDependency {
+@Table(name="tbl_dependency")
+public class Dependency {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
   @Column
   private String name;
+
   @Column
   private String description;
 
   @OneToMany(mappedBy = "dependency")
-  private ArrayList<SpringProperty> properties;
+  private List<Property> properties;
 }

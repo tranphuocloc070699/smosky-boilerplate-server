@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SpringProperty {
+@Table(name="tbl_property")
+public class Property {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   @Column
@@ -24,5 +26,5 @@ public class SpringProperty {
 
   @ManyToOne
   @JoinColumn(name = "dependency_id")
-  private SpringDependency dependency;
+  private Dependency dependency;
 }

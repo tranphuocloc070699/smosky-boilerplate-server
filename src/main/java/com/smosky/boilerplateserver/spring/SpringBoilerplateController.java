@@ -1,17 +1,19 @@
 package com.smosky.boilerplateserver.spring;
 
 import lombok.RequiredArgsConstructor;
+import net.lingala.zip4j.ZipFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/spring")
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class SpringBoilerplateController {
 
   private final SpringDependencyRepository repository;
-
+  private final PropertyRepository propertyRepository;
   final int size = 100 * 1024 * 1024;
   final ExchangeStrategies strategies = ExchangeStrategies.builder()
       .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
@@ -56,7 +58,7 @@ public class SpringBoilerplateController {
   }
 
   @PostMapping("")
-  public Object boilerplate() {
+  public Object boilerplate(@RequestBody Dependency dependency) {
     String randomName= UUID.randomUUID().toString();
     String apiUrl = "https://start.spring.io/starter.zip";
     String queryParams = "bootVersion=3.2.1&type=maven-project&packaging=jar&jvmVersion=17" +
@@ -74,21 +76,41 @@ public class SpringBoilerplateController {
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
-        java.nio.file.Files.write(java.nio.file.Path.of("my-project"+".zip"), responseBody);
+        Files.write(Path.of("my-project"+".zip"), responseBody);
+        ZipFile zipFile = new ZipFile("my-project.zip");
+        zipFile.extractAll("extract-project");
 
-        System.out.println("Download successful!");
+        File file = new File("extract-project/src/main/resources/application.properties");
+
+        writeArrayListToFile(dependency.getProperties(),file.toPath().toString());
+
+        System.out.println("file existed:" + file);
+        return file.exists();
+
+
       } catch (IOException e) {
         e.printStackTrace();
       }
     } else {
       System.out.println("Failed to download.");
     }
-
     return true;
   }
 
+  private static void writeArrayListToFile(List<Property> arrayList, String filePath) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      for (Property line : arrayList) {
+        // Write each line followed by a newline character
+        writer.write(line.getName()+"="+line.getValue());
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      e.printStackTrace(); // Handle the exception based on your requirements
+    }
+  }
+
   @PostMapping("/dependency")
-  public Object createDependency(@RequestBody SpringDependency dto) {
+  public Object createDependency(@RequestBody Dependency dto) {
 
     return repository.save(dto);
   }
