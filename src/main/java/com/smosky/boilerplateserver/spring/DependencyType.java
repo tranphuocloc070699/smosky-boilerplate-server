@@ -1,6 +1,5 @@
 package com.smosky.boilerplateserver.spring;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -10,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -20,25 +18,22 @@ import java.util.Map;
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
-public class Property {
+public class DependencyType {
+
   @Id
-  private String id;
+  @GeneratedValue
+  private Integer id;
 
   @Column
-  private String title;
+  private String name;
 
   @Column
-  private String defaultValue;
-
-  @Column
-  private String toolTip;
+  @Enumerated
+  private LanguageType languageType;
 
 
-  @OneToMany(mappedBy = "property")
-  private List<SelectOption> options;
+  @OneToMany(mappedBy = "type")
+  private List<Dependency> dependencies;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="dependency_id")
-  private Dependency dependency;
 
 }

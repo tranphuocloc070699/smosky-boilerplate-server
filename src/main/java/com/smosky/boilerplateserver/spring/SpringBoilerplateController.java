@@ -7,7 +7,6 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -20,8 +19,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SpringBoilerplateController {
 
-  private final SpringDependencyRepository repository;
+  private final DependencyRepository repository;
   private final PropertyRepository propertyRepository;
+  private final SelectOptionRepository selectOptionRepository;
+  private final LinkRepository linkRepository;
+  private final TypeRepository typeRepository;
   final int size = 100 * 1024 * 1024;
   final ExchangeStrategies strategies = ExchangeStrategies.builder()
       .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
@@ -89,7 +91,7 @@ public class SpringBoilerplateController {
 
        /* Write config to application.properties */
         File file = new File("extract-project/src/main/resources/application.properties");
-        writeArrayListToFile(dependency.getProperties(),file.toPath().toString());
+//        writeArrayListToFile(dependency.getProperties(),file.toPath().toString());
 
         System.out.println("file existed:" + file);
         return file.exists();
@@ -108,7 +110,7 @@ public class SpringBoilerplateController {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
       for (Property line : arrayList) {
         // Write each line followed by a newline character
-        writer.write(line.getName()+"="+line.getValue());
+//        writer.write(line.getName()+"="+line.getValue());
         writer.newLine();
       }
     } catch (IOException e) {
@@ -120,6 +122,25 @@ public class SpringBoilerplateController {
   public Object createDependency(@RequestBody Dependency dto) {
 
     return repository.save(dto);
+  }
+
+  @GetMapping("/ci-cd")
+  public Object getCiCd(){
+/*    ClassPathResource resource = new ClassPathResource("spring-dependencies.json");
+    Path filePath = null;
+    try {
+      filePath = Paths.get(resource.getURI());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    try {
+      return Files.readString(filePath);
+    } catch (IOException e) {_
+      throw new RuntimeException(e);
+    }*/
+    List<DependencyType> types = typeRepository.findAllWithDependencies();
+    return types;
   }
 
 

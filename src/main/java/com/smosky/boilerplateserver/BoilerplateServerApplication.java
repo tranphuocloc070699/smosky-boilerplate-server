@@ -1,21 +1,34 @@
 package com.smosky.boilerplateserver;
 
-import com.smosky.boilerplateserver.spring.Dependency;
-import com.smosky.boilerplateserver.spring.PropertyRepository;
-import com.smosky.boilerplateserver.spring.SpringDependencyRepository;
-import com.smosky.boilerplateserver.spring.Property;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.smosky.boilerplateserver.spring.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 public class BoilerplateServerApplication implements CommandLineRunner {
-	private final SpringDependencyRepository springDependencyRepository;
+	private final DependencyRepository dependencyRepository;
 	private final PropertyRepository propertyRepository;
+
+	private final SelectOptionRepository selectOptionRepository;
+	private final LinkRepository linkRepository;
+	private final TypeRepository typeRepository;
+	private static final ObjectMapper objectMapper = new ObjectMapper();
 	public static void main(String[] args) {
 		SpringApplication.run(BoilerplateServerApplication.class, args);
 	}
@@ -23,39 +36,237 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		Map<String,String> jpaProperties = new HashMap<>();
-//		jpaProperties.put("spring.datasource.url",)
-//		SpringDependency springDataJpa = SpringDependency.builder()
-//				.id("spring-data-jpa")
-//				.name("name")
-//				.description("Spring Data Jpa Description")
-//				.map()
-//				.build();
-//		repository.save()
+//		String springJsonString = getSpringJsonObject("spring-dependencies.json");
+//		saveSpringType(springJsonString);
+		convertOriginal();
+	}
 
-		Dependency springDataJpa = Dependency.builder()
-				.id("spring-data-jpa")
-				.name("Spring Data Jpa")
-				.description("Spring Data Jpa Dependency")
-				.build();
+	private void convertOriginal() throws JsonProcessingException {
+			String jsonString = getSpringJsonObject("original.json");
+			JsonNode nodes = objectMapper.readTree(jsonString).path("dependencies");
 
-		springDependencyRepository.save(springDataJpa);
+		for (JsonNode node : nodes) {
+			DependencyType type = typeRepository.save(
+					DependencyType.builder()
+							.name(node.path("name").asText())
+							.languageType(LanguageType.SPRING)
+							.build()
+			);
+			JsonNode dependenciesNodes = node.path("content");
+			convertDependencyOriginal(dependenciesNodes,type);
+		}
+	}
 
-		Property jpaDataUrl = propertyRepository.save(Property.builder()
-				.name("spring.datasource.url")
-				.dependency(springDataJpa)
-				.build());
-		Property jpaDataUsername = propertyRepository.save(
-				Property.builder()
-						.name("spring.datasource.username")
-						.dependency(springDataJpa)
+	private void convertDependencyOriginal(JsonNode dependenciesNodes, DependencyType type) {
+		for (JsonNode dependencyNode : dependenciesNodes) {
+			JsonNode compatibilityRangeNode = dependencyNode.path("compatibilityRange");
+			String[] splitResult = new String[]{};
+			if (!compatibilityRangeNode.asText().isEmpty()) {
+				String compatibilityRange = compatibilityRangeNode.asText();
+				if (compatibilityRange.startsWith("[")) {
+				 compatibilityRange = compatibilityRange.substring(1);
+				}
+				if (compatibilityRange.endsWith(")")) {
+					compatibilityRange = 	compatibilityRange.substring(0,compatibilityRange.length()-1);
+				}
+
+				splitResult = compatibilityRange.split(",");
+
+
+			}
+			Dependency dependency = dependencyRepository.save(
+					Dependency.builder()
+							.id(dependencyNode.path("id").asText())
+							.name(dependencyNode.path("name").asText())
+							.description(dependencyNode.path("description").asText())
+							.compatibilityRanges(Arrays.stream(splitResult).toList())
+							.type(type)
+							.build()
+			);
+			convertLinksOriginal(dependency);
+			convertPropertiesAndOptionsOriginal(dependency);
+		}
+	}
+
+	private static List<String> convertJson(String json) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode root = objectMapper.readTree(json);
+
+		List<String> result = new ArrayList<>();
+
+		JsonNode compatibilityRangeNode = root.path("compatibilityRange");
+
+		if (compatibilityRangeNode.isArray()) {
+			Iterator<JsonNode> elements = compatibilityRangeNode.elements();
+
+			while (elements.hasNext()) {
+				JsonNode element = elements.next();
+				result.add(element.asText());
+			}
+		} else if (compatibilityRangeNode.isTextual()) {
+			result.add(compatibilityRangeNode.asText());
+		}
+
+		return result;
+	}
+
+
+	private void convertPropertiesAndOptionsOriginal(Dependency dependency) {
+		if (dependency.getId().equals("data-jpa")) {
+			Property property1 = propertyRepository.save(
+					Property.builder()
+							.id("spring.datasource.url")
+							.title("Url")
+							.defaultValue("http://localhost:PORT/DB_NAME")
+							.toolTip("This is url to connect to your database")
+							.dependency(dependency)
+							.build()
+			);
+			Property property2 = propertyRepository.save(
+					Property.builder()
+							.id("spring.datasource.username")
+							.title("Url")
+							.defaultValue("root")
+							.toolTip("This is username to authentication with your database")
+							.dependency(dependency)
+							.build()
+			);
+			Property property3 = propertyRepository.save(
+					Property.builder()
+							.id("spring.datasource.password")
+							.title("Password")
+							.defaultValue("root")
+							.toolTip("This is password to authentication with your database")
+							.dependency(dependency)
+							.build()
+			);
+			Property property4 = propertyRepository.save(
+					Property.builder()
+							.id("spring.main.web-application-type")
+							.title("Application type")
+							.defaultValue("servlet")
+							.toolTip("This is type of application")
+							.dependency(dependency)
+							.build()
+			);
+			SelectOption selectOption = selectOptionRepository.save(SelectOption.builder()
+							.label("Servlet")
+							.value("servlet")
+							.property(property4)
+					.build());
+		}
+	}
+
+	private void convertLinksOriginal(Dependency dependency) {
+		linkRepository.save(
+				Link.builder()
+						.name("maven")
+						.title("Maven")
+						.url("")
+						.dependency(dependency)
 						.build()
 		);
-		Property jpaDataPassword = propertyRepository.save(Property.builder()
-				.name("spring.datasource.password")
-				.dependency(springDataJpa)
-				.build());
+		linkRepository.save(
+				Link.builder()
+						.name("github")
+						.title("Github")
+						.url("")
+						.dependency(dependency)
+						.build()
+		);
+		linkRepository.save(
+				Link.builder()
+						.name("homepage")
+						.title("Homepage")
+						.url("")
+						.dependency(dependency)
+						.build()
+		);
+		linkRepository.save(
+				Link.builder()
+						.name("gradle")
+						.title("Gradle")
+						.url("")
+						.dependency(dependency)
+						.build()
+		);
+	}
+
+	private void saveSpringType(String springJsonString) {
+		try {
+			JsonNode nodes = objectMapper.readTree(springJsonString);
+			if (!nodes.isArray()) return;
+
+			for (JsonNode node : nodes) {
+				DependencyType type = typeRepository.save(DependencyType.builder().name(node.path("name").asText()).languageType(LanguageType.SPRING).build());
+				saveSpringDependencies(node.path("dependencies"), type);
+			}
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 
 
+	private void saveSpringDependencies(JsonNode nodes, DependencyType type) throws JsonProcessingException {
+
+		if (!nodes.isArray()) return;
+		for (JsonNode node : nodes) {
+			Dependency dependency = dependencyRepository.save(
+					Dependency.builder().id(node.path("id").asText()).name(node.path("name").asText()).description(
+							node.path("description").asText()).type(type).notice(node.path("notice").asText()).build());
+
+			saveSpringLinks(node.path("links"), dependency);
+			saveSpringProperties(node.path("properties"), dependency);
+		}
+
+
+	}
+
+	private void saveSpringProperties(JsonNode nodes, Dependency dependency) {
+		if (!nodes.isArray()) return;
+		for (JsonNode node : nodes) {
+			Property property = propertyRepository.save(
+					Property.builder().id(node.path("id").asText()).defaultValue(node.path("defaultValue").asText()).title(
+							node.path("title").asText()).toolTip(node.path("toolTip").asText()).dependency(dependency).build());
+
+			saveSpringSelectOptions(node.path("options"), property);
+		}
+	}
+
+	private void saveSpringSelectOptions(JsonNode nodes, Property property) {
+		if (!nodes.isArray()) return;
+		for (JsonNode node : nodes) {
+			System.out.println(node);
+			selectOptionRepository.save(
+					SelectOption.builder().label(node.path("label").asText()).value(node.path("value").asText()).property(property).build());
+		}
+	}
+
+	private void saveSpringLinks(JsonNode nodes, Dependency dependency) {
+
+		if (!nodes.isArray()) return;
+
+		for (JsonNode node : nodes) {
+			linkRepository.save(
+					Link.builder().name(node.path("name").asText()).title(node.path("title").asText()).url(
+							node.path("url").asText()).dependency(dependency).build());
+		}
+	}
+
+	private String getSpringJsonObject(String path) {
+		ClassPathResource resource = new ClassPathResource(path);
+		Path filePath = null;
+		try {
+			filePath = Paths.get(resource.getURI());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		try {
+			return Files.readString(filePath);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

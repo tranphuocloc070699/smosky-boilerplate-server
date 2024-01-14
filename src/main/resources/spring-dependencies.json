@@ -1,0 +1,1985 @@
+[
+  {
+    "name": "DEVELOPER TOOLS",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "lombok",
+        "name": "Lombok",
+        "description": "Java annotation library which helps to reduce boilerplate code.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "native",
+        "name": "GraalVM Native Support",
+        "description": "Support for compiling Spring applications to native executables using the GraalVM native-image compiler.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "devtools",
+        "name": "Spring Boot DevTools",
+        "description": "Provides fast application restarts, LiveReload, and configurations for enhanced development experience.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "dgs-codegen",
+        "name": "GraphQL DGS Code Generation",
+        "description": "Generate data types and type-safe APIs for querying GraphQL APIs by parsing schema files.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "configuration-processor",
+        "name": "Spring Configuration Processor",
+        "description": "Generate metadata for developers to offer contextual help and \"code completion\" when working with custom configuration keys (ex.application.properties/.yml files).",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "docker-compose",
+        "name": "Docker Compose Support",
+        "description": "Provides docker compose support for enhanced development experience.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "modulith",
+        "name": "Spring Modulith",
+        "description": "Support for building modular monolithic applications.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "WEB",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "web",
+        "name": "Spring Web",
+        "description": "Build web, including RESTful, applications using Spring MVC. Uses Apache Tomcat as the default embedded container.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "webflux",
+        "name": "Spring Reactive Web",
+        "description": "Build reactive web applications with Spring WebFlux and Netty.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "graphql",
+        "name": "Spring for GraphQL",
+        "description": "Build GraphQL applications with Spring for GraphQL and GraphQL Java.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-rest",
+        "name": "Rest Repositories",
+        "description": "Exposing Spring Data repositories over REST via Spring Data REST.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "session",
+        "name": "Spring Session",
+        "description": "Provides an API and implementations for managing user session information.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-rest-explorer",
+        "name": "Rest Repositories HAL Explorer",
+        "description": "Browsing Spring Data REST repositories in your browser.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "hateoas",
+        "name": "Spring HATEOAS",
+        "description": "Eases the creation of RESTful APIs that follow the HATEOAS principle when working with Spring / Spring MVC.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "web-services",
+        "name": "Spring Web Services",
+        "description": "Facilitates contract-first SOAP development. Allows for the creation of flexible web services using one of the many ways to manipulate XML payloads.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "jersey",
+        "name": "Jersey",
+        "description": "Framework for developing RESTful Web Services in Java that provides support for JAX-RS APIs.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "vaadin",
+        "name": "Vaadin",
+        "description": "A web framework that allows you to write UI in pure Java without getting bogged down in JS, HTML, and CSS.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "hilla",
+        "name": "Hilla",
+        "description": "An open source framework that integrates a Spring Boot Java backend with a reactive TypeScript frontend.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "TEMPLATE ENGINES",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "thymeleaf",
+        "name": "Thymeleaf",
+        "description": "A modern server-side Java template engine for both web and standalone environments. Allows HTML to be correctly displayed in browsers and as static prototypes.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "freemarker",
+        "name": "Apache Freemarker",
+        "description": "Java library to generate text output (HTML web pages, e-mails, configuration files, source code, etc.) based on templates and changing data.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "mustache",
+        "name": "Mustache",
+        "description": "Logic-less templates for both web and standalone environments. There are no if statements, else clauses, or for loops. Instead there are only tags.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "groovy-templates",
+        "name": "Groovy Templates",
+        "description": "Groovy templating engine.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "SECURITY",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "security",
+        "name": "Spring Security",
+        "description": "Highly customizable authentication and access-control framework for Spring applications.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "oauth2-client",
+        "name": "OAuth2 Client",
+        "description": "Spring Boot integration for Spring Security's OAuth2/OpenID Connect client features.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "oauth2-authorization-server",
+        "name": "OAuth2 Authorization Server",
+        "description": "Spring Boot integration for Spring Authorization Server.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "oauth2-resource-server",
+        "name": "OAuth2 Resource Server",
+        "description": "Spring Boot integration for Spring Security's OAuth2 resource server features.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-ldap",
+        "name": "Spring LDAP",
+        "description": "Makes it easier to build Spring based applications that use the Lightweight Directory Access Protocol.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "okta",
+        "name": "Okta",
+        "description": "Okta specific configuration for Spring Security/Spring Boot OAuth2 features. Enable your Spring Boot application to work with Okta via OAuth 2.0/OIDC.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "SQL",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "jdbc",
+        "name": "JDBC API",
+        "description": "Database Connectivity API that defines how a client may connect and query a database.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-jpa",
+        "name": "Spring Data Jpa",
+        "description": "Persist data in SQL stores with Java Persistence API using Spring Data and Hibernate.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "notice something",
+        "properties": [
+          {
+            "id": "spring.datasource.url",
+            "title": "Url",
+            "defaultValue": "http://localhost:5432/",
+            "toolTip": "This is url to connect to your database",
+            "options": []
+          },
+          {
+            "id": "spring.datasource.username",
+            "title": "Username",
+            "defaultValue": "root",
+            "toolTip": "This is username to authentication with your database",
+            "options": []
+          },
+          {
+            "id": "spring.datasource.password",
+            "title": "Password",
+            "defaultValue": "root",
+            "toolTip": "This is password to authentication with your database",
+            "options": []
+          },
+          {
+            "id": "spring.main.web-application-type",
+            "title": "Application type",
+            "defaultValue": "servlet",
+            "toolTip": "This is type of application",
+            "options": [
+              {
+                "label": "Servlet",
+                "value": "servlet"
+              }
+            ]
+          },
+          {
+            "id": "spring.jpa.database-platform",
+            "title": "Type of database",
+            "defaultValue": [],
+            "toolTip": "Define type of database",
+            "options": {
+              "label": "Postgresql",
+              "value": "org.hibernate.dialect.PostgreSQLDialect"
+            }
+          },
+          {
+            "id": "spring.jpa.hibernate.ddl-auto",
+            "title": "Type of database",
+            "defaultValue": "create-drop",
+            "toolTip": "Define kind of application",
+            "options": [
+              {
+                "label": "Create And Drop",
+                "value": "create-drop"
+              },
+              {
+                "label": "Validate",
+                "value": "validate"
+              }
+            ]
+          },
+          {
+            "id": "spring.jpa.show-sql",
+            "title": "Show Sql",
+            "defaultValue": true,
+            "toolTip": "Show sql query at terminal",
+            "options": []
+          }
+        ]
+      },
+      {
+        "id": "data-jdbc",
+        "name": "Spring Data JDBC",
+        "description": "Persist data in SQL stores with plain JDBC using Spring Data.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-r2dbc",
+        "name": "Spring Data R2DBC",
+        "description": "Provides Reactive Relational Database Connectivity to persist data in SQL stores using Spring Data in reactive applications.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "mybatis",
+        "name": "MyBatis Framework",
+        "description": "Persistence framework with support for custom SQL, stored procedures and advanced mappings. MyBatis couples objects with stored procedures or SQL statements using a XML descriptor or annotations.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "liquibase",
+        "name": "Liquibase Migration",
+        "description": "Liquibase database migration and source control library.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "flyway",
+        "name": "Flyway Migration",
+        "description": "Version control for your database so you can migrate from any version (incl. an empty database) to the latest version of the schema.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "jooq",
+        "name": "JOOQ Access Layer",
+        "description": "Generate Java code from your database and build type safe SQL queries through a fluent API.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "db2",
+        "name": "IBM DB2 Driver",
+        "description": "A JDBC driver that provides access to IBM DB2.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "derby",
+        "name": "Apache Derby Database",
+        "description": "An open source relational database implemented entirely in Java.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "h2",
+        "name": "H2 Database",
+        "description": "Provides a fast in-memory database that supports JDBC API and R2DBC access, with a small (2mb) footprint. Supports embedded and server modes as well as a browser based console application.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "hsql",
+        "name": "HyperSQL Database",
+        "description": "Lightweight 100% Java SQL Database Engine.\n",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "mariadb",
+        "name": "MariaDB Driver",
+        "description": "MariaDB JDBC and R2DBC driver.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "sqlserver",
+        "name": "MS SQL Server Driver",
+        "description": "A JDBC and R2DBC driver that provides access to Microsoft SQL Server and Azure SQL Database from any Java application.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "mysql",
+        "name": "MySQL Driver",
+        "description": "MySQL JDBC driver.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "oracle",
+        "name": "Oracle Driver",
+        "description": "A JDBC driver that provides access to Oracle.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "postgresql",
+        "name": "PostgreSQL Driver",
+        "description": "A JDBC and R2DBC driver that allows Java programs to connect to a PostgreSQL database using standard, database independent Java code.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "NOSQL",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "data-redis",
+        "name": "Spring Data Redis (Access+Driver)",
+        "description": "Advanced and thread-safe Java Redis client for synchronous, asynchronous, and reactive usage. Supports Cluster, Sentinel, Pipelining, Auto-Reconnect, Codecs and much more.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-redis-reactive",
+        "name": "Spring Data Reactive Redis",
+        "description": "Access Redis key-value data stores in a reactive fashion with Spring Data Redis.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-mongodb",
+        "name": "Spring Data MongoDB",
+        "description": "Store data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-mongodb-reactive",
+        "name": "Spring Data Reactive MongoDB",
+        "description": "Provides asynchronous stream processing with non-blocking back pressure for MongoDB.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-elasticsearch",
+        "name": "Spring Data Elasticsearch (Access+Driver)",
+        "description": "A distributed, RESTful search and analytics engine with Spring Data Elasticsearch.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-cassandra",
+        "name": "Spring Data for Apache Cassandra",
+        "description": "A free and open-source, distributed, NoSQL database management system that offers high-scalability and high-performance.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-cassandra-reactive",
+        "name": "Spring Data Reactive for Apache Cassandra",
+        "description": "Access Cassandra NoSQL Database in a reactive fashion.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase",
+        "name": "Spring Data Couchbase",
+        "description": "NoSQL document-oriented database that offers in memory-first architecture, geo-distributed deployments, and workload isolation.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-neo4j",
+        "name": "Spring Data Neo4j",
+        "description": "An open source NoSQL database that stores data structured as graphs consisting of nodes, connected by relationships.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "MESSAGING",
+    "languageType": "SPRING",
+    "dependencies": [
+      {
+        "id": "integration",
+        "name": "Spring Integration",
+        "description": "Adds support for Enterprise Integration Patterns. Enables lightweight messaging and supports integration with external systems via declarative adapters.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "amqp",
+        "name": "Spring for RabbitMQ",
+        "description": "Gives your applications a common platform to send and receive messages, and your messages a safe place to live until received.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      },
+      {
+        "id": "data-couchbase-reactive",
+        "name": "Spring Data Reactive Couchbase",
+        "description": "Access Couchbase NoSQL database in a reactive fashion with Spring Data Couchbase.",
+        "links": [
+          {
+            "title": "Maven",
+            "name": "maven",
+            "icon": "",
+            "url": "https://mvnrepository.com/artifact/org.projectlombok/lombok"
+          },
+          {
+            "title": "Github",
+            "name": "github",
+            "icon": "",
+            "url": "https://github.com/projectlombok/lombok"
+          },
+          {
+            "title": "Homepage",
+            "name": "homepage",
+            "icon": "",
+            "url": "https://projectlombok.org"
+          }
+        ],
+        "notice": "",
+        "properties": []
+      }
+    ]
+  },
+  {
+    "name": "I/O",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "OPS",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "OBSERVABILITY",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "TESTING",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD CONFIG",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD DISCOVERY",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD ROUTING",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD CIRCUIT BREAKER",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "SPRING CLOUD MESSAGING",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "VMWARE TANZU APPLICATION SERVICE",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "MICROSOFT AZURE",
+    "languageType": "SPRING",
+    "dependencies": []
+  },
+  {
+    "name": "GOOGLE CLOUD",
+    "languageType": "SPRING",
+    "dependencies": []
+  }
+]

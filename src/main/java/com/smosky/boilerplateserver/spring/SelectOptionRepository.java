@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface SpringDependencyRepository extends JpaRepository<Dependency,String> {
+public interface SelectOptionRepository extends JpaRepository<SelectOption,Integer> {
 
 }
