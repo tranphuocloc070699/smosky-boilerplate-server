@@ -1,7 +1,10 @@
 package com.smosky.boilerplateserver.spring;
 
+import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
 import lombok.RequiredArgsConstructor;
 import net.lingala.zip4j.ZipFile;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,6 +28,7 @@ public class SpringBoilerplateController {
   private final SelectOptionRepository selectOptionRepository;
   private final LinkRepository linkRepository;
   private final TypeRepository typeRepository;
+  private final AppInfoConfigDto appInfoConfigDto;
   final int size = 100 * 1024 * 1024;
   final ExchangeStrategies strategies = ExchangeStrategies.builder()
       .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
@@ -150,5 +155,11 @@ public class SpringBoilerplateController {
           .collect(Collectors.toList());
 
     }
+  }
+
+  @GetMapping("/contact-info")
+  public ResponseEntity<Object> getContactInfo() {
+    System.out.println(appInfoConfigDto.getMessage());
+    return ResponseEntity.status(HttpStatus.OK).body(appInfoConfigDto);
   }
 }

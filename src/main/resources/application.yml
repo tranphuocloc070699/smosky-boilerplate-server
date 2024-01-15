@@ -1,5 +1,5 @@
 server:
-  port: 8070
+  port: 8080
   error:
     include-message: always
     whitelabel:
@@ -9,13 +9,14 @@ spring:
   application:
     name: "boilerplate-server"
   profiles:
-    active: "prod"
+    active: "default"
   main:
     web-application-type: servlet
   datasource:
     url: jdbc:postgresql://localhost:5432/smosky
     username: loctran
     password: Loc123456
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -24,3 +25,18 @@ spring:
       hibernate: org.hibernate.dialect.PostgreSQLDialect
       format-sql: true
     show-sql: false
+  config:
+    import: "optional:configserver:http://localhost:8070"
+    logging.level:
+      org.springframework.security: TRACE
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
