@@ -1,10 +1,7 @@
 package com.smosky.boilerplateserver.spring;
 
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
-import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
-import com.smosky.boilerplateserver.spring.dtos.DependencyDto;
-import com.smosky.boilerplateserver.spring.dtos.MetadataDto;
-import com.smosky.boilerplateserver.spring.dtos.PropertyDto;
+import com.smosky.boilerplateserver.spring.dtos.*;
 import lombok.RequiredArgsConstructor;
 import net.lingala.zip4j.ZipFile;
 import org.springframework.http.HttpStatus;
@@ -16,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -156,8 +154,16 @@ public class SpringBoilerplateController {
         /* Write config to application.properties */
         File file = new File("extract-project/src/main/resources/application.properties");
         writeArrayListToFile(dto.getDependencies(),file.toPath().toString());
+        for (EntityDto entityDto : dto.getEntities()) {
+          String entitiesPath = "extract-project/src/main/java/" + dto.getMetadata().getGroupId().replace(".","/") + "/" + dto.getMetadata().getArtifactId() + "/entities";
+          File entitiesFolder = new File(entitiesPath);
+          entitiesFolder.mkdir();
+          String packagePath = "package " + dto.getMetadata().getGroupId() + "." + dto.getMetadata().getArtifactId() + ".entities";
+          String entityPath = entitiesPath+"/"+entityDto.getName();
+          createEntityTemplate(entityDto,packagePath,entityPath);
+        }
 
-        System.out.println("file existed:" + file);
+
         return file.exists();
 
 
@@ -194,6 +200,76 @@ public class SpringBoilerplateController {
         // Write each line followed by a newline character
 
       }
+    } catch (IOException e) {
+      e.printStackTrace(); // Handle the exception based on your requirements
+    }
+  }
+
+  private static void createEntityTemplate(EntityDto dto, String packagePath, String filePath) {
+    File file = new File(filePath+".java");
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath+".java"))) {
+      ArrayList<String> defaultTypes = new ArrayList<>(List.of("String", "Integer", "Float"));
+
+      writer.write(packagePath + ";");
+      writer.newLine();
+      writer.write("import jakarta.persistence.*;");
+      writer.newLine();
+      writer.write("import lombok.AllArgsConstructor;");
+      writer.newLine();
+      writer.write("import lombok.Builder;");
+      writer.newLine();
+      writer.write("import lombok.Data;");
+      writer.newLine();
+      writer.write("import lombok.NoArgsConstructor;\n");
+      writer.newLine();
+
+      writer.write("@Data");
+      writer.newLine();
+      writer.write("@NoArgsConstructor");
+      writer.newLine();
+      writer.write("@AllArgsConstructor");
+      writer.newLine();
+      writer.write("@Builder");
+      writer.newLine();
+      writer.write("@Entity");
+      writer.newLine();
+
+      /*Class*/
+      writer.write("public class " + dto.getName() + "{");
+      writer.newLine();
+      for (TemplateDto templateDto : dto.getTemplates()) {
+        if (templateDto.getPrimary()) {
+          writer.write("@Id");
+          writer.newLine();
+          writer.write("@GeneratedValue");
+          writer.newLine();
+          writer.write("private " + templateDto.getType() + " " + templateDto.getName()+";");
+          writer.newLine();
+        } else if (!defaultTypes.contains(templateDto.getType())) {
+
+        } else {
+          writer.write("@Column");
+          writer.newLine();
+          writer.write("private " + templateDto.getType() + " " + templateDto.getName() +";");
+          writer.newLine();
+        }
+
+        writer.newLine();
+      }
+      writer.newLine();
+      writer.write("}");
+
+    /*  for (DependencyDto line : arrayList) {
+        writer.newLine();
+        writer.write("# "+ line.getId());
+        writer.newLine();
+        for (PropertyDto propertyDto : line.getProperties()) {
+          writer.write(propertyDto.getId()+"="+propertyDto.getDefaultValue());
+          writer.newLine();
+        }
+        // Write each line followed by a newline character
+
+      }*/
     } catch (IOException e) {
       e.printStackTrace(); // Handle the exception based on your requirements
     }

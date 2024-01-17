@@ -18,6 +18,8 @@ public class CreateBoilerplateDto {
 
     private List<DependencyDto> dependencies;
 
+    private List<EntityDto> entities;
+
 
 }
 
