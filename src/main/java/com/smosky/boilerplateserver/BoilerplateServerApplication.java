@@ -113,7 +113,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 
 	private void convertPropertiesAndOptionsOriginal(Dependency dependency) {
 		if (dependency.getId().equals("data-jpa")) {
-			Property property1 = propertyRepository.save(
+			 propertyRepository.save(
 					Property.builder()
 							.id("spring.datasource.url")
 							.title("Url")
@@ -122,7 +122,8 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 							.dependency(dependency)
 							.build()
 			);
-			Property property2 = propertyRepository.save(
+
+			 propertyRepository.save(
 					Property.builder()
 							.id("spring.datasource.username")
 							.title("Url")
@@ -131,7 +132,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 							.dependency(dependency)
 							.build()
 			);
-			Property property3 = propertyRepository.save(
+			propertyRepository.save(
 					Property.builder()
 							.id("spring.datasource.password")
 							.title("Password")
@@ -149,7 +150,43 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 							.dependency(dependency)
 							.build()
 			);
-			SelectOption selectOption = selectOptionRepository.save(SelectOption.builder()
+			Property property5 = propertyRepository.save(
+					Property.builder()
+							.id("spring.jpa.database-platform")
+							.title("Database type")
+							.defaultValue("org.hibernate.dialect.PostgreSQLDialect")
+							.toolTip("This is database type of application")
+							.dependency(dependency)
+							.build()
+			);
+			Property property6 = propertyRepository.save(
+					Property.builder()
+							.id("spring.jpa.hibernate.ddl-auto")
+							.title("Placeholder")
+							.defaultValue("create-drop")
+							.toolTip("This is placeholder")
+							.dependency(dependency)
+							.build()
+			);
+//			Property property5 = propertyRepository.save(
+//					Property.builder()
+//							.id("spring.main.web-application-type")
+//							.title("Application type")
+//							.defaultValue("servlet")
+//							.toolTip("This is type of application")
+//							.dependency(dependency)
+//							.build()
+//			);
+//			Property property5 = propertyRepository.save(
+//					Property.builder()
+//							.id("spring.main.web-application-type")
+//							.title("Application type")
+//							.defaultValue("servlet")
+//							.toolTip("This is type of application")
+//							.dependency(dependency)
+//							.build()
+//			);
+			selectOptionRepository.save(SelectOption.builder()
 							.label("Servlet")
 							.value("servlet")
 							.property(property4)

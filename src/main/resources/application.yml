@@ -22,7 +22,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     properties:
-      hibernate: org.hibernate.dialect.PostgreSQLDialect
+#      hibernate: org.hibernate.dialect.PostgreSQLDialect
       format-sql: true
     show-sql: false
   config:

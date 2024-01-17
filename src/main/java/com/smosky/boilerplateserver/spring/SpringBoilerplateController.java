@@ -1,6 +1,10 @@
 package com.smosky.boilerplateserver.spring;
 
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
+import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
+import com.smosky.boilerplateserver.spring.dtos.DependencyDto;
+import com.smosky.boilerplateserver.spring.dtos.MetadataDto;
+import com.smosky.boilerplateserver.spring.dtos.PropertyDto;
 import lombok.RequiredArgsConstructor;
 import net.lingala.zip4j.ZipFile;
 import org.springframework.http.HttpStatus;
@@ -12,7 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -64,7 +67,7 @@ public class SpringBoilerplateController {
     }
   }
 
-  @PostMapping("")
+ /* @PostMapping("")
   public Object boilerplate(@RequestBody Dependency dependency) {
     String randomName= UUID.randomUUID().toString();
     String apiUrl = "https://start.spring.io/starter.zip";
@@ -83,18 +86,18 @@ public class SpringBoilerplateController {
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
-        /* Write .zip file from start.spring.io to folder */
+        *//* Write .zip file from start.spring.io to folder *//*
         Files.write(Path.of("my-project"+".zip"), responseBody);
 
-        /* Extract .zip file */
+        *//* Extract .zip file *//*
         ZipFile zipFile = new ZipFile("my-project.zip");
         zipFile.extractAll("extract-project");
 
-        /*
+        *//*
         * Validate value
-        * */
+   * *//*
 
-       /* Write config to application.properties */
+   *//* Write config to application.properties *//*
         File file = new File("extract-project/src/main/resources/application.properties");
 //        writeArrayListToFile(dependency.getProperties(),file.toPath().toString());
 
@@ -109,14 +112,87 @@ public class SpringBoilerplateController {
       System.out.println("Failed to download.");
     }
     return true;
+  }*/
+
+  @PostMapping("")
+  public Object boilerplate(@RequestBody CreateBoilerplateDto dto) {
+    String randomName = UUID.randomUUID().toString();
+    StringBuilder dependencies = new StringBuilder("lombok");
+
+    List<DependencyDto> dependencyDtos = dto.getDependencies();
+    for (DependencyDto dependencyDto : dependencyDtos) {
+      dependencies.append(",").append(dependencyDto.getId());
+    }
+//    System.out.println(dependencies);
+    String urlString = getString(dto, dependencies);
+        WebClient webClient = WebClient.create();
+    byte[] responseBody = webClient.get()
+        .uri(urlString)
+        .retrieve()
+        .bodyToMono(byte[].class)
+        .block();
+//    return urlString;
+//    String queryParams = "bootVersion=3.2.1&type=maven-project&packaging=jar&jvmVersion=17" +
+//        "&groupId=com.loctran&artifactId=demo&name=demo&description=description" +
+//        "&dependencies=lombok,web,data-jpa,postgresql";
+//
+
+
+
+    if (responseBody != null) {
+      // Save the response to a file (my-project.zip)
+      try {
+        /* Write .zip file from start.spring.io to folder */
+        Files.write(Path.of("my-project"+".zip"), responseBody);
+
+        /* Extract .zip file */
+        ZipFile zipFile = new ZipFile("my-project.zip");
+        zipFile.extractAll("extract-project");
+
+        /*
+         * Validate value
+         * */
+
+        /* Write config to application.properties */
+        File file = new File("extract-project/src/main/resources/application.properties");
+        writeArrayListToFile(dto.getDependencies(),file.toPath().toString());
+
+        System.out.println("file existed:" + file);
+        return file.exists();
+
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else {
+      System.out.println("Failed to download.");
+    }
+  return true;
   }
 
-  private static void writeArrayListToFile(List<Property> arrayList, String filePath) {
+  private String getString(CreateBoilerplateDto dto, StringBuilder dependencies) {
+    MetadataDto metadataDto = dto.getMetadata();
+    String apiUrl = "https://start.spring.io/starter.zip";
+    String queryParams = String.format("bootVersion=%s&type=%s&packaging=%s&jvmVersion=%d" +
+            "&groupId=%s&artifactId=%s&name=%s&description=%s" +
+            "&dependencies=%s", dto.getBootVersion(), dto.getType(), metadataDto.getPackaging(), metadataDto.getJvmVersion(),
+        metadataDto.getGroupId(), metadataDto.getArtifactId(), metadataDto.getName(),metadataDto.getDescription(), dependencies);
+    String urlString = apiUrl + "?" + queryParams;
+    return urlString;
+  }
+
+  private static void writeArrayListToFile(List<DependencyDto> arrayList, String filePath) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-      for (Property line : arrayList) {
-        // Write each line followed by a newline character
-//        writer.write(line.getName()+"="+line.getValue());
+      for (DependencyDto line : arrayList) {
         writer.newLine();
+        writer.write("# "+ line.getId());
+        writer.newLine();
+        for (PropertyDto propertyDto : line.getProperties()) {
+          writer.write(propertyDto.getId()+"="+propertyDto.getDefaultValue());
+          writer.newLine();
+        }
+        // Write each line followed by a newline character
+
       }
     } catch (IOException e) {
       e.printStackTrace(); // Handle the exception based on your requirements
