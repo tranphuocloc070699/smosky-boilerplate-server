@@ -4,6 +4,8 @@ import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
 import com.smosky.boilerplateserver.spring.dtos.*;
 import lombok.RequiredArgsConstructor;
 import net.lingala.zip4j.ZipFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +32,13 @@ public class SpringBoilerplateController {
   private final LinkRepository linkRepository;
   private final TypeRepository typeRepository;
   private final AppInfoConfigDto appInfoConfigDto;
+  public static final String CORRELATION_ID = "X-CORRELATION-ID";
   final int size = 100 * 1024 * 1024;
   final ExchangeStrategies strategies = ExchangeStrategies.builder()
       .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
       .build();
+
+  private static final Logger logger = LoggerFactory.getLogger(SpringBoilerplateController.class);
   @GetMapping("")
   public Object hello() {
     String[] array = new String[]{"/home/loctran/.nvm/versions/node/v21.2.0/bin/npm","init","-y"};
@@ -282,20 +287,9 @@ public class SpringBoilerplateController {
   }
 
   @GetMapping("/ci-cd")
-  public Object getCiCd(){
-/*    ClassPathResource resource = new ClassPathResource("spring-dependencies.json");
-    Path filePath = null;
-    try {
-      filePath = Paths.get(resource.getURI());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-
-    try {
-      return Files.readString(filePath);
-    } catch (IOException e) {_
-      throw new RuntimeException(e);
-    }*/
+  public Object getCiCd(  @RequestHeader(CORRELATION_ID)
+                            String correlationId){
+    System.out.println(String.format(CORRELATION_ID + " found: {} ", correlationId));
     List<DependencyType> types = typeRepository.findAllWithDependencies();
     return types;
   }
