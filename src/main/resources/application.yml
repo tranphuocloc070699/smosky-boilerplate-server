@@ -6,10 +6,13 @@ server:
       enabled: false
     path: /error
 spring:
+  cloud:
+    config:
+      enabled: false
   application:
     name: "boilerplate-server"
-  profiles:
-    active: "default"
+#  profiles:
+#    active: "default"
   main:
     web-application-type: servlet
   datasource:
@@ -24,15 +27,15 @@ spring:
     properties:
       format-sql: true
     show-sql: false
-  config:
-    import: "optional:configserver:http://localhost:8070"
+#  config:
+#    import: "optional:configserver:http://localhost:8070"
     logging.level:
       org.springframework.security: TRACE
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 management:
   endpoints:
@@ -58,14 +61,14 @@ endpoints:
   shutdown:
     enabled: true
 
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8071/eureka/
+#eureka:
+#  instance:
+#    preferIpAddress: true
+#  client:
+#    fetchRegistry: true
+#    registerWithEureka: true
+#    serviceUrl:
+#      defaultZone: http://localhost:8071/eureka/
 
 info:
   app:

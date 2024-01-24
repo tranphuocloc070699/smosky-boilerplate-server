@@ -88,7 +88,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 		}
 	}
 
-	private static List<String> convertJson(String json) throws IOException {
+	/*private static List<String> convertJson(String json) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(json);
 
@@ -108,7 +108,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 		}
 
 		return result;
-	}
+	}*/
 
 
 	private void convertPropertiesAndOptionsOriginal(Dependency dependency) {
@@ -117,7 +117,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 					Property.builder()
 							.id("spring.datasource.url")
 							.title("Url")
-							.defaultValue("http://localhost:PORT/DB_NAME")
+							.defaultValue("jdbc:postgresql://localhost:5432/postgres")
 							.toolTip("This is url to connect to your database")
 							.dependency(dependency)
 							.build()
@@ -229,7 +229,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 		);
 	}
 
-	private void saveSpringType(String springJsonString) {
+	/*private void saveSpringType(String springJsonString) {
 		try {
 			JsonNode nodes = objectMapper.readTree(springJsonString);
 			if (!nodes.isArray()) return;
@@ -242,7 +242,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 			throw new RuntimeException(e);
 		}
 
-	}
+	}*/
 
 
 	private void saveSpringDependencies(JsonNode nodes, DependencyType type) throws JsonProcessingException {

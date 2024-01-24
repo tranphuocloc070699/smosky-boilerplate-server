@@ -1,8 +1,12 @@
 package com.smosky.boilerplateserver.spring;
 
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
+import com.smosky.boilerplateserver.shared.Constant;
 import com.smosky.boilerplateserver.spring.dtos.*;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import net.lingala.zip4j.ZipFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +19,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -213,21 +216,16 @@ public class SpringBoilerplateController {
   private static void createEntityTemplate(EntityDto dto, String packagePath, String filePath) {
     File file = new File(filePath+".java");
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath+".java"))) {
-      ArrayList<String> defaultTypes = new ArrayList<>(List.of("String", "Integer", "Float"));
+      List<String> defaultTypes = Constant.DEFAULT_JAVA_TYPE;
 
       writer.write(packagePath + ";");
       writer.newLine();
       writer.write("import jakarta.persistence.*;");
       writer.newLine();
-      writer.write("import lombok.AllArgsConstructor;");
+      writer.write("import lombok.*;");
       writer.newLine();
-      writer.write("import lombok.Builder;");
+      writer.write("import java.util.List;");
       writer.newLine();
-      writer.write("import lombok.Data;");
-      writer.newLine();
-      writer.write("import lombok.NoArgsConstructor;\n");
-      writer.newLine();
-
       writer.write("@Data");
       writer.newLine();
       writer.write("@NoArgsConstructor");
@@ -238,10 +236,13 @@ public class SpringBoilerplateController {
       writer.newLine();
       writer.write("@Entity");
       writer.newLine();
-
+      writer.write("@Table(name = \"tbl_" + dto.getName().toLowerCase() + "\")");
+      writer.newLine();
       /*Class*/
       writer.write("public class " + dto.getName() + "{");
       writer.newLine();
+
+      String id = "";
       for (TemplateDto templateDto : dto.getTemplates()) {
         if (templateDto.getPrimary()) {
           writer.write("@Id");
@@ -250,7 +251,77 @@ public class SpringBoilerplateController {
           writer.newLine();
           writer.write("private " + templateDto.getType() + " " + templateDto.getName()+";");
           writer.newLine();
+          id = templateDto.getName();
         } else if (!defaultTypes.contains(templateDto.getType())) {
+
+          switch (templateDto.getType()) {
+            case "OneToOne": {
+              if (templateDto.getMappedBy() != null && templateDto.getMappedBy().isEmpty()) {
+                writer.write("@" + templateDto.getType() + "(" + "cascade = CascadeType.ALL" + ")");
+                writer.newLine();
+                writer.write(
+                    "@JoinColumn(name = " + "\"" + templateDto.getName().toLowerCase() + "_" + templateDto.getReferencedColumnName() + "\"" + ", referencedColumnName = " + "\"" + templateDto.getReferencedColumnName() + "\"" + ")");
+              } else if (templateDto.getMappedBy() != null && templateDto.getReferencedColumnName().isEmpty()) {
+                writer.write("@" + templateDto.getType() + "(" + "mappedBy = " + "\"" + templateDto.getMappedBy() + "\"" + ")");
+              }
+
+
+              writer.newLine();
+              writer.write("private " + templateDto.getName() + " " + templateDto.getName().toLowerCase() + ";");
+              writer.newLine();
+              break;
+            }
+            case "OneToMany": {
+              if (!templateDto.getMappedBy().isEmpty()) {
+                writer.write("@OneToMany(mappedBy = \""+templateDto.getMappedBy()+"\")");
+                writer.newLine();
+                writer.write("private " + "List<"+templateDto.getName()+">" + " " + templateDto.getName().toLowerCase() + "s;");
+              }
+              break;
+            }
+            case "ManyToOne": {
+              if (!templateDto.getReferencedColumnName().isEmpty()) {
+                writer.write("@ManyToOne(fetch = FetchType.EAGER)");
+                writer.newLine();
+                writer.write("@JoinColumn(name=\""+templateDto.getName().toLowerCase()+"_"+templateDto.getReferencedColumnName()+"\")");
+                writer.newLine();
+                writer.write("private " + templateDto.getName() + " " + templateDto.getName().toLowerCase() + ";");
+              }
+              break;
+            }
+
+            case "ManyToMany": {
+              writer.newLine();
+              if (templateDto.getMappedBy() != null && templateDto.getMappedBy().isEmpty()) {
+              writer.write("@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)");
+              writer.newLine();
+                writer.write("@EqualsAndHashCode.Exclude");
+                writer.newLine();
+                writer.write("@ToString.Exclude");
+                writer.newLine();
+                String joinTableName = dto.getName().toLowerCase() + "_" + templateDto.getName().toLowerCase();
+                String joinColumn = dto.getName().toLowerCase() + "_" + id;
+                String inverseJoinColumn = templateDto.getName().toLowerCase()+"_" + templateDto.getReferencedColumnName();
+                writer.write("@JoinTable(name = \""+joinTableName+"\",\n" +
+                    "                    joinColumns = @JoinColumn(name = \""+joinColumn+"\"),\n" +
+                    "                    inverseJoinColumns = @JoinColumn(name = \""+inverseJoinColumn+"\")\n" +
+                    "                )");
+              }else if (templateDto.getMappedBy() != null && templateDto.getReferencedColumnName().isEmpty()) {
+                writer.write("@ManyToMany(mappedBy = \""+templateDto.getMappedBy()+"\")");
+                writer.newLine();
+                writer.write("@EqualsAndHashCode.Exclude");
+                writer.newLine();
+                writer.write("@ToString.Exclude");
+              }
+              writer.newLine();
+              writer.write("private List<"+templateDto.getName()+">"+" "+" "+templateDto.getName().toLowerCase()+"s;");
+              break;
+            }
+
+
+            default:
+              break;
+          }
 
         } else {
           writer.write("@Column");
@@ -276,7 +347,7 @@ public class SpringBoilerplateController {
 
       }*/
     } catch (IOException e) {
-      e.printStackTrace(); // Handle the exception based on your requirements
+      e.printStackTrace();
     }
   }
 
