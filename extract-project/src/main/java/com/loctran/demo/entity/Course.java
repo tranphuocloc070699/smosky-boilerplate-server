@@ -1,7 +1,9 @@
-package com.loctran.demo.entities;
+package com.loctran.demo.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,14 +18,13 @@ private Integer id;
 @Column
 private String name;
 
-
 @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 @EqualsAndHashCode.Exclude
 @ToString.Exclude
-@JoinTable(name = "course_user",
-                    joinColumns = @JoinColumn(name = "course_id"),
-                    inverseJoinColumns = @JoinColumn(name = "user_id")
+@JoinTable(name = "_courseuser",
+                    joinColumns = @JoinColumn(name = "_courseid"),
+                    inverseJoinColumns = @JoinColumn(name = "_userid")
                 )
-private List<User>  users;
+private List<User> users;
 
 }

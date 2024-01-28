@@ -1,7 +1,9 @@
-package com.loctran.demo.entities;
+package com.loctran.demo.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +31,6 @@ private List<Post> posts;
 @ManyToMany(mappedBy = "users")
 @EqualsAndHashCode.Exclude
 @ToString.Exclude
-private List<Course>  courses;
+private List<Course> courses;
 
 }
