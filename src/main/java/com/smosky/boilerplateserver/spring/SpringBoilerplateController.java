@@ -2,11 +2,14 @@ package com.smosky.boilerplateserver.spring;
 
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
 import com.smosky.boilerplateserver.shared.Constant;
+import com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto;
+import com.smosky.boilerplateserver.spring.dtos.BoilerplateWithReviewCountingDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateEntityDependencyId;
 import com.smosky.boilerplateserver.spring.dtos.DependencyDto;
 import com.smosky.boilerplateserver.spring.dtos.EntityDto;
 import com.smosky.boilerplateserver.spring.dtos.MetadataDto;
+import com.smosky.boilerplateserver.spring.dtos.PropertyDto;
 import com.smosky.boilerplateserver.spring.dtos.TemplateDto;
 import com.smosky.boilerplateserver.util.ApplicationFileTemplate;
 import com.smosky.boilerplateserver.util.CustomWriter;
@@ -28,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +41,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -50,6 +56,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RestController
 @RequestMapping("/spring")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class SpringBoilerplateController {
 
   private final DependencyRepository repository;
@@ -58,6 +65,8 @@ public class SpringBoilerplateController {
   private final LinkRepository linkRepository;
   private final TypeRepository typeRepository;
   private final AppInfoConfigDto appInfoConfigDto;
+  private final BoilerplateRepository boilerplateRepository;
+  private final ReviewRepository reviewRepository;
   private final List<String> defaultTypes = Constant.DEFAULT_JAVA_TYPE;
   public static final String CORRELATION_ID = "X-CORRELATION-ID";
   final int size = 100 * 1024 * 1024;
@@ -67,9 +76,24 @@ public class SpringBoilerplateController {
 
   private static final Logger logger = LoggerFactory.getLogger(SpringBoilerplateController.class);
 
+
   @GetMapping("")
-  public Object hello() {
-    String[] array = new String[]{"/home/loctran/.nvm/versions/node/v21.2.0/bin/npm", "init", "-y"};
+  public Object fetchAllBoilerplate() {
+
+   /* List<Object[]> nestedArrays = boilerplateRepository.findAllWithStarCounting();
+
+    List<BoilerplateWithReviewCountingDto> resultList = new ArrayList<>();
+
+    for (Object[] nestedArr : nestedArrays) {
+      BoilerplateWithReviewCountingDto dto = new BoilerplateWithReviewCountingDto(nestedArr);
+      resultList.add(dto);
+    }
+
+    return resultList;*/
+
+    return boilerplateRepository.findAllWithStarCounting();
+
+    /*String[] array = new String[]{"/home/loctran/.nvm/versions/node/v21.2.0/bin/npm", "init", "-y"};
     try {
       Process process = new ProcessBuilder(array).redirectErrorStream(true).start();
 
@@ -81,10 +105,7 @@ public class SpringBoilerplateController {
 
       String line;
       StringBuilder output = new StringBuilder();
-//      while ((line = reader.readLine()) != null) {
-//        output.append(line).append("\n");
-//        System.out.println(line);
-//      }
+
 
       List<String> arr = readOutput(is);
       for (var item : arr) {
@@ -94,7 +115,20 @@ public class SpringBoilerplateController {
       return output;
     } catch (IOException e) {
       return e.getMessage();
-    }
+    }*/
+  }
+
+  @GetMapping("{name}")
+  public Object fetchBoilerplateDetail(
+      @PathVariable("name") String name
+  ) {
+
+    System.out.println("name: " + name);
+
+    BoilerplateDetailDto dto = boilerplateRepository.findByName(name);
+
+    dto.setReviews(reviewRepository.findAllByBoilerplateId(dto.getId()));
+    return dto;
   }
 
  /* @PostMapping("")

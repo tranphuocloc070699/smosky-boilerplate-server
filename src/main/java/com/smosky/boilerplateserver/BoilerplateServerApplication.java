@@ -22,71 +22,122 @@ import java.util.List;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class BoilerplateServerApplication implements CommandLineRunner {
-	private final DependencyRepository dependencyRepository;
-	private final PropertyRepository propertyRepository;
 
-	private final SelectOptionRepository selectOptionRepository;
-	private final LinkRepository linkRepository;
-	private final TypeRepository typeRepository;
-	private static final ObjectMapper objectMapper = new ObjectMapper();
-	public static void main(String[] args) {
-		SpringApplication.run(BoilerplateServerApplication.class, args);
-	}
+  private final DependencyRepository dependencyRepository;
+  private final PropertyRepository propertyRepository;
+
+  private final SelectOptionRepository selectOptionRepository;
+  private final LinkRepository linkRepository;
+  private final TypeRepository typeRepository;
+  private final BoilerplateRepository boilerplateRepository;
+  private final ReviewRepository reviewRepository;
+  private static final ObjectMapper objectMapper = new ObjectMapper();
+
+  public static void main(String[] args) {
+    SpringApplication.run(BoilerplateServerApplication.class, args);
+  }
 
 
-	@Override
-	public void run(String... args) throws Exception {
+  @Override
+  public void run(String... args) throws Exception {
 //		String springJsonString = getSpringJsonObject("spring-dependencies.json");
 //		saveSpringType(springJsonString);
-		convertOriginal();
-	}
 
-	private void convertOriginal() throws JsonProcessingException {
-			String jsonString = getSpringJsonObject("original.json");
-			JsonNode nodes = objectMapper.readTree(jsonString).path("dependencies");
+    createBoilerplateFromJson();
+    convertOriginal();
+  }
 
-		for (JsonNode node : nodes) {
-			DependencyType type = typeRepository.save(
-					DependencyType.builder()
-							.name(node.path("name").asText())
-							.languageType(LanguageType.SPRING)
-							.build()
-			);
-			JsonNode dependenciesNodes = node.path("content");
-			convertDependencyOriginal(dependenciesNodes,type);
-		}
-	}
+  private void createBoilerplateFromJson() throws JsonProcessingException {
+    String jsonString = getSpringJsonObject("boilerplate.json");
+    JsonNode nodes = objectMapper.readTree(jsonString);
 
-	private void convertDependencyOriginal(JsonNode dependenciesNodes, DependencyType type) {
-		for (JsonNode dependencyNode : dependenciesNodes) {
-			JsonNode compatibilityRangeNode = dependencyNode.path("compatibilityRange");
-			String[] splitResult = new String[]{};
-			if (!compatibilityRangeNode.asText().isEmpty()) {
-				String compatibilityRange = compatibilityRangeNode.asText();
-				if (compatibilityRange.startsWith("[")) {
-				 compatibilityRange = compatibilityRange.substring(1);
-				}
-				if (compatibilityRange.endsWith(")")) {
-					compatibilityRange = 	compatibilityRange.substring(0,compatibilityRange.length()-1);
-				}
+    for (JsonNode node : nodes) {
+      Boilerplate boilerplate = boilerplateRepository.save(Boilerplate.builder()
+          .name(node.path("name").asText())
+          .description(node.path("description").asText())
+          .build());
+      Review review = Review.builder()
+          .name("loctran")
+          .email("tranphuocloc070699@gmail.com")
+          .content("Good content")
+          .star(5)
+          .boilerplate(boilerplate)
+          .build();
+      Review review2 = Review.builder()
+          .name("loctran")
+          .email("tranphuocloc070699@gmail.com")
+          .content("Bad Bad Bad!!!")
+          .star(1)
+          .boilerplate(boilerplate)
+          .build();
+      Review review3 = Review.builder()
+          .name("loctran")
+          .email("tranphuocloc070699@gmail.com")
+          .content("Bad Bad Bad!!!")
+          .star(1)
+          .boilerplate(boilerplate)
+          .build();
+      Review review4 = Review.builder()
+          .name("loctran")
+          .email("tranphuocloc070699@gmail.com")
+          .content("Bad Bad Bad!!!")
+          .star(1)
+          .boilerplate(boilerplate)
+          .build();
+      reviewRepository.save(review);
+      reviewRepository.save(review2);
+      reviewRepository.save(review3);
+      reviewRepository.save(review4);
 
-				splitResult = compatibilityRange.split(",");
+    }
+  }
+
+  private void convertOriginal() throws JsonProcessingException {
+    String jsonString = getSpringJsonObject("original.json");
+    JsonNode nodes = objectMapper.readTree(jsonString).path("dependencies");
+
+    for (JsonNode node : nodes) {
+      DependencyType type = typeRepository.save(
+          DependencyType.builder()
+              .name(node.path("name").asText())
+              .languageType(LanguageType.SPRING)
+              .build()
+      );
+      JsonNode dependenciesNodes = node.path("content");
+      convertDependencyOriginal(dependenciesNodes, type);
+    }
+  }
+
+  private void convertDependencyOriginal(JsonNode dependenciesNodes, DependencyType type) {
+    for (JsonNode dependencyNode : dependenciesNodes) {
+      JsonNode compatibilityRangeNode = dependencyNode.path("compatibilityRange");
+      String[] splitResult = new String[]{};
+      if (!compatibilityRangeNode.asText().isEmpty()) {
+        String compatibilityRange = compatibilityRangeNode.asText();
+        if (compatibilityRange.startsWith("[")) {
+          compatibilityRange = compatibilityRange.substring(1);
+        }
+        if (compatibilityRange.endsWith(")")) {
+          compatibilityRange = compatibilityRange.substring(0, compatibilityRange.length() - 1);
+        }
+
+        splitResult = compatibilityRange.split(",");
 
 
-			}
-			Dependency dependency = dependencyRepository.save(
-					Dependency.builder()
-							.id(dependencyNode.path("id").asText())
-							.name(dependencyNode.path("name").asText())
-							.description(dependencyNode.path("description").asText())
-							.compatibilityRanges(Arrays.stream(splitResult).toList())
-							.type(type)
-							.build()
-			);
-			convertLinksOriginal(dependency);
-			convertPropertiesAndOptionsOriginal(dependency);
-		}
-	}
+      }
+      Dependency dependency = dependencyRepository.save(
+          Dependency.builder()
+              .id(dependencyNode.path("id").asText())
+              .name(dependencyNode.path("name").asText())
+              .description(dependencyNode.path("description").asText())
+              .compatibilityRanges(Arrays.stream(splitResult).toList())
+              .type(type)
+              .build()
+      );
+      convertLinksOriginal(dependency);
+      convertPropertiesAndOptionsOriginal(dependency);
+    }
+  }
 
 	/*private static List<String> convertJson(String json) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -111,63 +162,63 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 	}*/
 
 
-	private void convertPropertiesAndOptionsOriginal(Dependency dependency) {
-		if (dependency.getId().equals("data-jpa")) {
-			 propertyRepository.save(
-					Property.builder()
-							.id("spring.datasource.url")
-							.title("Url")
-							.defaultValue("jdbc:postgresql://localhost:5432/postgres")
-							.toolTip("This is url to connect to your database")
-							.dependency(dependency)
-							.build()
-			);
+  private void convertPropertiesAndOptionsOriginal(Dependency dependency) {
+    if (dependency.getId().equals("data-jpa")) {
+      propertyRepository.save(
+          Property.builder()
+              .id("spring.datasource.url")
+              .title("Url")
+              .defaultValue("jdbc:postgresql://localhost:5432/postgres")
+              .toolTip("This is url to connect to your database")
+              .dependency(dependency)
+              .build()
+      );
 
-			 propertyRepository.save(
-					Property.builder()
-							.id("spring.datasource.username")
-							.title("Url")
-							.defaultValue("root")
-							.toolTip("This is username to authentication with your database")
-							.dependency(dependency)
-							.build()
-			);
-			propertyRepository.save(
-					Property.builder()
-							.id("spring.datasource.password")
-							.title("Password")
-							.defaultValue("root")
-							.toolTip("This is password to authentication with your database")
-							.dependency(dependency)
-							.build()
-			);
-			Property property4 = propertyRepository.save(
-					Property.builder()
-							.id("spring.main.web-application-type")
-							.title("Application type")
-							.defaultValue("servlet")
-							.toolTip("This is type of application")
-							.dependency(dependency)
-							.build()
-			);
-			Property property5 = propertyRepository.save(
-					Property.builder()
-							.id("spring.jpa.database-platform")
-							.title("Database type")
-							.defaultValue("org.hibernate.dialect.PostgreSQLDialect")
-							.toolTip("This is database type of application")
-							.dependency(dependency)
-							.build()
-			);
-			Property property6 = propertyRepository.save(
-					Property.builder()
-							.id("spring.jpa.hibernate.ddl-auto")
-							.title("Placeholder")
-							.defaultValue("create-drop")
-							.toolTip("This is placeholder")
-							.dependency(dependency)
-							.build()
-			);
+      propertyRepository.save(
+          Property.builder()
+              .id("spring.datasource.username")
+              .title("Url")
+              .defaultValue("root")
+              .toolTip("This is username to authentication with your database")
+              .dependency(dependency)
+              .build()
+      );
+      propertyRepository.save(
+          Property.builder()
+              .id("spring.datasource.password")
+              .title("Password")
+              .defaultValue("root")
+              .toolTip("This is password to authentication with your database")
+              .dependency(dependency)
+              .build()
+      );
+      Property property4 = propertyRepository.save(
+          Property.builder()
+              .id("spring.main.web-application-type")
+              .title("Application type")
+              .defaultValue("servlet")
+              .toolTip("This is type of application")
+              .dependency(dependency)
+              .build()
+      );
+      Property property5 = propertyRepository.save(
+          Property.builder()
+              .id("spring.jpa.database-platform")
+              .title("Database type")
+              .defaultValue("org.hibernate.dialect.PostgreSQLDialect")
+              .toolTip("This is database type of application")
+              .dependency(dependency)
+              .build()
+      );
+      Property property6 = propertyRepository.save(
+          Property.builder()
+              .id("spring.jpa.hibernate.ddl-auto")
+              .title("Placeholder")
+              .defaultValue("create-drop")
+              .toolTip("This is placeholder")
+              .dependency(dependency)
+              .build()
+      );
 //			Property property5 = propertyRepository.save(
 //					Property.builder()
 //							.id("spring.main.web-application-type")
@@ -186,124 +237,136 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 //							.dependency(dependency)
 //							.build()
 //			);
-			selectOptionRepository.save(SelectOption.builder()
-							.label("Servlet")
-							.value("servlet")
-							.property(property4)
-					.build());
-		}
-	}
+      selectOptionRepository.save(SelectOption.builder()
+          .label("Servlet")
+          .value("servlet")
+          .property(property4)
+          .build());
+    }
+  }
 
-	private void convertLinksOriginal(Dependency dependency) {
-		linkRepository.save(
-				Link.builder()
-						.name("maven")
-						.title("Maven")
-						.url("")
-						.dependency(dependency)
-						.build()
-		);
-		linkRepository.save(
-				Link.builder()
-						.name("github")
-						.title("Github")
-						.url("")
-						.dependency(dependency)
-						.build()
-		);
-		linkRepository.save(
-				Link.builder()
-						.name("homepage")
-						.title("Homepage")
-						.url("")
-						.dependency(dependency)
-						.build()
-		);
-		linkRepository.save(
-				Link.builder()
-						.name("gradle")
-						.title("Gradle")
-						.url("")
-						.dependency(dependency)
-						.build()
-		);
-	}
+  private void convertLinksOriginal(Dependency dependency) {
+    linkRepository.save(
+        Link.builder()
+            .name("maven")
+            .title("Maven")
+            .url("")
+            .dependency(dependency)
+            .build()
+    );
+    linkRepository.save(
+        Link.builder()
+            .name("github")
+            .title("Github")
+            .url("")
+            .dependency(dependency)
+            .build()
+    );
+    linkRepository.save(
+        Link.builder()
+            .name("homepage")
+            .title("Homepage")
+            .url("")
+            .dependency(dependency)
+            .build()
+    );
+    linkRepository.save(
+        Link.builder()
+            .name("gradle")
+            .title("Gradle")
+            .url("")
+            .dependency(dependency)
+            .build()
+    );
+  }
 
-	/*private void saveSpringType(String springJsonString) {
-		try {
-			JsonNode nodes = objectMapper.readTree(springJsonString);
-			if (!nodes.isArray()) return;
+  /*private void saveSpringType(String springJsonString) {
+    try {
+      JsonNode nodes = objectMapper.readTree(springJsonString);
+      if (!nodes.isArray()) return;
 
-			for (JsonNode node : nodes) {
-				DependencyType type = typeRepository.save(DependencyType.builder().name(node.path("name").asText()).languageType(LanguageType.SPRING).build());
-				saveSpringDependencies(node.path("dependencies"), type);
-			}
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
+      for (JsonNode node : nodes) {
+        DependencyType type = typeRepository.save(DependencyType.builder().name(node.path("name").asText()).languageType(LanguageType.SPRING).build());
+        saveSpringDependencies(node.path("dependencies"), type);
+      }
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
 
-	}*/
+  }*/
+  private void saveSpringDependencies(JsonNode nodes, DependencyType type)
+      throws JsonProcessingException {
+
+    if (!nodes.isArray()) {
+      return;
+    }
+    for (JsonNode node : nodes) {
+      Dependency dependency = dependencyRepository.save(
+          Dependency.builder().id(node.path("id").asText()).name(node.path("name").asText())
+              .description(
+                  node.path("description").asText()).type(type).notice(node.path("notice").asText())
+              .build());
+
+      saveSpringLinks(node.path("links"), dependency);
+      saveSpringProperties(node.path("properties"), dependency);
+    }
 
 
-	private void saveSpringDependencies(JsonNode nodes, DependencyType type) throws JsonProcessingException {
+  }
 
-		if (!nodes.isArray()) return;
-		for (JsonNode node : nodes) {
-			Dependency dependency = dependencyRepository.save(
-					Dependency.builder().id(node.path("id").asText()).name(node.path("name").asText()).description(
-							node.path("description").asText()).type(type).notice(node.path("notice").asText()).build());
+  private void saveSpringProperties(JsonNode nodes, Dependency dependency) {
+    if (!nodes.isArray()) {
+      return;
+    }
+    for (JsonNode node : nodes) {
+      Property property = propertyRepository.save(
+          Property.builder().id(node.path("id").asText())
+              .defaultValue(node.path("defaultValue").asText()).title(
+                  node.path("title").asText()).toolTip(node.path("toolTip").asText())
+              .dependency(dependency).build());
 
-			saveSpringLinks(node.path("links"), dependency);
-			saveSpringProperties(node.path("properties"), dependency);
-		}
+      saveSpringSelectOptions(node.path("options"), property);
+    }
+  }
 
+  private void saveSpringSelectOptions(JsonNode nodes, Property property) {
+    if (!nodes.isArray()) {
+      return;
+    }
+    for (JsonNode node : nodes) {
+      System.out.println(node);
+      selectOptionRepository.save(
+          SelectOption.builder().label(node.path("label").asText())
+              .value(node.path("value").asText()).property(property).build());
+    }
+  }
 
-	}
+  private void saveSpringLinks(JsonNode nodes, Dependency dependency) {
 
-	private void saveSpringProperties(JsonNode nodes, Dependency dependency) {
-		if (!nodes.isArray()) return;
-		for (JsonNode node : nodes) {
-			Property property = propertyRepository.save(
-					Property.builder().id(node.path("id").asText()).defaultValue(node.path("defaultValue").asText()).title(
-							node.path("title").asText()).toolTip(node.path("toolTip").asText()).dependency(dependency).build());
+    if (!nodes.isArray()) {
+      return;
+    }
 
-			saveSpringSelectOptions(node.path("options"), property);
-		}
-	}
+    for (JsonNode node : nodes) {
+      linkRepository.save(
+          Link.builder().name(node.path("name").asText()).title(node.path("title").asText()).url(
+              node.path("url").asText()).dependency(dependency).build());
+    }
+  }
 
-	private void saveSpringSelectOptions(JsonNode nodes, Property property) {
-		if (!nodes.isArray()) return;
-		for (JsonNode node : nodes) {
-			System.out.println(node);
-			selectOptionRepository.save(
-					SelectOption.builder().label(node.path("label").asText()).value(node.path("value").asText()).property(property).build());
-		}
-	}
+  private String getSpringJsonObject(String path) {
+    ClassPathResource resource = new ClassPathResource(path);
+    Path filePath = null;
+    try {
+      filePath = Paths.get(resource.getURI());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 
-	private void saveSpringLinks(JsonNode nodes, Dependency dependency) {
-
-		if (!nodes.isArray()) return;
-
-		for (JsonNode node : nodes) {
-			linkRepository.save(
-					Link.builder().name(node.path("name").asText()).title(node.path("title").asText()).url(
-							node.path("url").asText()).dependency(dependency).build());
-		}
-	}
-
-	private String getSpringJsonObject(String path) {
-		ClassPathResource resource = new ClassPathResource(path);
-		Path filePath = null;
-		try {
-			filePath = Paths.get(resource.getURI());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
-			return Files.readString(filePath);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    try {
+      return Files.readString(filePath);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
