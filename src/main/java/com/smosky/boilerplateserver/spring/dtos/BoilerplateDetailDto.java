@@ -14,6 +14,8 @@ public class BoilerplateDetailDto {
 
   Integer id;
   String name;
+  String thumbnail;
+  String previewLink;
   String description;
   Long totalReview;
   Double starAvg;
@@ -23,11 +25,18 @@ public class BoilerplateDetailDto {
   Long fourStar;
   Long fiveStar;
   List<ReviewDto> reviews;
+  Object dependenciesSelected;
+  Object projectStructure;
+  Object dependencies;
+  Object features;
 
-  public BoilerplateDetailDto(Integer id, String name, String description, Long totalReview,
-      Double starAvg, Long oneStar, Long twoStar, Long threeStar, Long fourStar, Long fiveStar) {
+
+  public BoilerplateDetailDto(Integer id, String name, String thumbnail,String previewLink,String description, Long totalReview,
+      Double starAvg, Long oneStar, Long twoStar, Long threeStar, Long fourStar, Long fiveStar,Object dependenciesSelected,Object features) {
     this.id = id;
     this.name = name;
+    this.thumbnail = thumbnail;
+    this.previewLink = previewLink;
     this.description = description;
     this.totalReview = totalReview;
     this.starAvg = starAvg;
@@ -36,5 +45,7 @@ public class BoilerplateDetailDto {
     this.threeStar = threeStar;
     this.fourStar = fourStar;
     this.fiveStar = fiveStar;
+    this.dependenciesSelected = dependenciesSelected;
+    this.features = features;
   }
 }

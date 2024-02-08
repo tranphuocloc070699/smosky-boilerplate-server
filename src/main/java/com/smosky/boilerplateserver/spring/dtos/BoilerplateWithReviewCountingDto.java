@@ -19,6 +19,7 @@ public class BoilerplateWithReviewCountingDto {
   private Integer id;
   private String name;
   private String description;
+  private String thumbnail;
   private Long totalReview;
   private Double starAvg;
 

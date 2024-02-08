@@ -839,28 +839,28 @@
           {
             "id": "spring.datasource.url",
             "title": "Url",
-            "defaultValue": "http://localhost:5432/",
+            "value": "http://localhost:5432/",
             "toolTip": "This is url to connect to your database",
             "options": []
           },
           {
             "id": "spring.datasource.username",
             "title": "Username",
-            "defaultValue": "root",
+            "value": "root",
             "toolTip": "This is username to authentication with your database",
             "options": []
           },
           {
             "id": "spring.datasource.password",
             "title": "Password",
-            "defaultValue": "root",
+            "value": "root",
             "toolTip": "This is password to authentication with your database",
             "options": []
           },
           {
             "id": "spring.main.web-application-type",
             "title": "Application type",
-            "defaultValue": "servlet",
+            "value": "servlet",
             "toolTip": "This is type of application",
             "options": [
               {
@@ -872,7 +872,7 @@
           {
             "id": "spring.jpa.database-platform",
             "title": "Type of database",
-            "defaultValue": [],
+            "value": [],
             "toolTip": "Define type of database",
             "options": {
               "label": "Postgresql",
@@ -882,7 +882,7 @@
           {
             "id": "spring.jpa.hibernate.ddl-auto",
             "title": "Type of database",
-            "defaultValue": "create-drop",
+            "value": "create-drop",
             "toolTip": "Define kind of application",
             "options": [
               {
@@ -898,7 +898,7 @@
           {
             "id": "spring.jpa.show-sql",
             "title": "Show Sql",
-            "defaultValue": true,
+            "value": true,
             "toolTip": "Show sql query at terminal",
             "options": []
           }

@@ -2,6 +2,7 @@ package com.smosky.boilerplateserver.spring;
 
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
 import com.smosky.boilerplateserver.shared.Constant;
+import com.smosky.boilerplateserver.shared.FileService;
 import com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto;
 import com.smosky.boilerplateserver.spring.dtos.BoilerplateWithReviewCountingDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
@@ -22,15 +23,22 @@ import com.smosky.boilerplateserver.util.RepositoryTemplate;
 import com.smosky.boilerplateserver.util.ServiceTemplate;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,7 +47,10 @@ import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +78,7 @@ public class SpringBoilerplateController {
   private final AppInfoConfigDto appInfoConfigDto;
   private final BoilerplateRepository boilerplateRepository;
   private final ReviewRepository reviewRepository;
+  private final FileService fileService;
   private final List<String> defaultTypes = Constant.DEFAULT_JAVA_TYPE;
   public static final String CORRELATION_ID = "X-CORRELATION-ID";
   final int size = 100 * 1024 * 1024;
@@ -90,9 +102,8 @@ public class SpringBoilerplateController {
     }
 
     return resultList;*/
-
-    return boilerplateRepository.findAllWithStarCounting();
-
+    var boilerplateData = boilerplateRepository.findAllWithStarCounting();
+    return boilerplateData;
     /*String[] array = new String[]{"/home/loctran/.nvm/versions/node/v21.2.0/bin/npm", "init", "-y"};
     try {
       Process process = new ProcessBuilder(array).redirectErrorStream(true).start();
@@ -122,35 +133,57 @@ public class SpringBoilerplateController {
   public Object fetchBoilerplateDetail(
       @PathVariable("name") String name
   ) {
+    try {
+      BoilerplateDetailDto dto = boilerplateRepository.findByName(name);
+      dto.setReviews(reviewRepository.findAllByBoilerplateId(dto.getId()));
+      dto.setProjectStructure(fileService.getNode(new File("examples/spring-data-jpa-postgresql")));
 
-    System.out.println("name: " + name);
+      dto.setDependencies(typeRepository.findAllWithDependencies());
 
-    BoilerplateDetailDto dto = boilerplateRepository.findByName(name);
-
-    dto.setReviews(reviewRepository.findAllByBoilerplateId(dto.getId()));
-    return dto;
+      dto.setDependenciesSelected(
+          convertDuplicatedStringToList(dto.getDependenciesSelected().toString()));
+      dto.setFeatures(convertDuplicatedStringToList(dto.getFeatures().toString()));
+      return dto;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
- /* @PostMapping("")
-  public Object boilerplate(@RequestBody Dependency dependency) {
-    String randomName= UUID.randomUUID().toString();
-    String apiUrl = "https://start.spring.io/starter.zip";
-    String queryParams = "bootVersion=3.2.1&type=maven-project&packaging=jar&jvmVersion=17" +
-        "&groupId=com.loctran&artifactId=demo&name=demo&description=description" +
-        "&dependencies=lombok,web,data-jpa,postgresql";
+  private List<String> convertDuplicatedStringToList(String input) {
+    String[] splitStrings = input.split(", ");
 
-    String urlString = apiUrl + "?" + queryParams;
-    WebClient webClient = WebClient.create();
-    byte[] responseBody = webClient.get()
-        .uri(urlString)
-        .retrieve()
-        .bodyToMono(byte[].class)
-        .block();
+    // Step 2: Convert the array of split strings into a list
+    List<String> listOfStrings = Arrays.asList(splitStrings);
 
-    if (responseBody != null) {
-      // Save the response to a file (my-project.zip)
-      try {
-        *//* Write .zip file from start.spring.io to folder *//*
+    // Step 3: Use a Set to remove duplicates
+    Set<String> setOfStrings = new HashSet<>(listOfStrings);
+
+    // Step 4: Convert the Set back to a list if needed
+    List<String> uniqueList = setOfStrings.stream().toList();
+
+    return uniqueList;
+  }
+
+  /* @PostMapping("")
+   public Object boilerplate(@RequestBody Dependency dependency) {
+     String randomName= UUID.randomUUID().toString();
+     String apiUrl = "https://start.spring.io/starter.zip";
+     String queryParams = "bootVersion=3.2.1&type=maven-project&packaging=jar&jvmVersion=17" +
+         "&groupId=com.loctran&artifactId=demo&name=demo&description=description" +
+         "&dependencies=lombok,web,data-jpa,postgresql";
+
+     String urlString = apiUrl + "?" + queryParams;
+     WebClient webClient = WebClient.create();
+     byte[] responseBody = webClient.get()
+         .uri(urlString)
+         .retrieve()
+         .bodyToMono(byte[].class)
+         .block();
+
+     if (responseBody != null) {
+       // Save the response to a file (my-project.zip)
+       try {
+         *//* Write .zip file from start.spring.io to folder *//*
         Files.write(Path.of("my-project"+".zip"), responseBody);
 
         *//* Extract .zip file *//*
@@ -177,10 +210,18 @@ public class SpringBoilerplateController {
     }
     return true;
   }*/
-
+  @CrossOrigin(origins = "http://localhost:3000")
   @PostMapping("")
   public Object boilerplate(@RequestBody CreateBoilerplateDto dto) {
-    String randomName = UUID.randomUUID().toString();
+    String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
+    String zipFileName = "zip/" + randomName + ".zip";
+
+    String zipFileResponse = "zip-response/" + randomName + ".zip";
+    String extractFileName = "extract-zip" + "/" + randomName;
+    File newFolder = new File(extractFileName);
+    if (!newFolder.exists()) {
+      newFolder.mkdir();
+    }
     StringBuilder dependencies = new StringBuilder("lombok");
 
     List<DependencyDto> dependencyDtos = dto.getDependencies();
@@ -204,25 +245,26 @@ public class SpringBoilerplateController {
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
+
         /* Write .zip file from start.spring.io to folder */
-        Files.write(Path.of("my-project" + ".zip"), responseBody);
+        Files.write(Path.of(zipFileName), responseBody);
 
         /* Extract .zip file */
-        ZipFile zipFile = new ZipFile("my-project.zip");
-        zipFile.extractAll("extract-project");
+        ZipFile zipFile = new ZipFile(zipFileName);
+        zipFile.extractAll(extractFileName);
 
         /*
          * Validate value
          * */
 
         /* Write config to application.properties */
-        File file = new File("extract-project/src/main/resources/application.properties");
+        File file = new File(extractFileName + "/src/main/resources/application.properties");
         ApplicationFileTemplate.writeArrayListToFile(dto.getDependencies(),
             file.toPath().toString());
 
         /*Package*/
         String packagePath =
-            "extract-project/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
+            extractFileName + "/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
                 + "/" + dto.getMetadata().getArtifactId();
 
         String packageName =
@@ -315,7 +357,22 @@ public class SpringBoilerplateController {
         ExceptionTemplate.writePackageToExceptionFile(exceptionDir.getPath(), exceptionPackagePath,
             responseDtoPath);
 
-        return file.exists();
+        /*Zip folder to file*/
+        ZipFile zipFolderToFile = new ZipFile(zipFileResponse);
+        zipFolderToFile.addFolder(new File(extractFileName));
+        InputStreamResource resource = new InputStreamResource(
+            new FileInputStream(zipFileResponse));
+      /*
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .body(resource);*/
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", zipFolderToFile.getFile().getName());
+        InputStream inputStream = new ByteArrayInputStream(
+            resource.getInputStream().readAllBytes());
+        return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
       } catch (IOException e) {
         e.printStackTrace();
       }

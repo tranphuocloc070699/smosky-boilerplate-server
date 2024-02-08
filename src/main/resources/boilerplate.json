@@ -1,6 +1,15 @@
 [
   {
     "name": "CRUD With Spring Data Jpa (Postgresql)",
-    "description": "Simple CRUD template."
+    "thumbnail": "https://miro.medium.com/v2/resize:fit:1400/1*oRR89Ifo9lxvXP8A6Q_gtA.png",
+    "description": "Simple CRUD template.",
+    "dependencies": ["lombok","web","data-jpa","postgresql"],
+    "previewLink": "https://www.youtube.com/embed/eoJecvGMR6E",
+    "features": [
+      "RESTful api endpoints",
+      "Customizable Data models",
+      "Auto generate docker file",
+      "Auto generate application.properties key"
+    ]
   }
 ]

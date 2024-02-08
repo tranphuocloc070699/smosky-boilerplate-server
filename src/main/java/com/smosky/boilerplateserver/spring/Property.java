@@ -28,10 +28,13 @@ public class Property {
   private String title;
 
   @Column
-  private String defaultValue;
+  private String value;
 
   @Column
   private String toolTip;
+
+  @Column
+  private Boolean isDisable;
 
 
   @OneToMany(mappedBy = "property")

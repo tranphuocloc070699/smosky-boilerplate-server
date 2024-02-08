@@ -52,9 +52,27 @@ public class BoilerplateServerApplication implements CommandLineRunner {
     JsonNode nodes = objectMapper.readTree(jsonString);
 
     for (JsonNode node : nodes) {
+      List<String> dependencies = new ArrayList<>();
+      List<String> features = new ArrayList<>();
+
+      if (node.path("dependencies").isArray()) {
+        for (JsonNode dependency : node.path("dependencies")) {
+          dependencies.add(dependency.asText());
+        }
+      }
+      if (node.path("features").isArray()) {
+        for (JsonNode feature : node.path("features")) {
+          features.add(feature.asText());
+        }
+      }
+
       Boilerplate boilerplate = boilerplateRepository.save(Boilerplate.builder()
           .name(node.path("name").asText())
           .description(node.path("description").asText())
+          .dependencies(dependencies)
+          .features(features)
+          .previewLink(node.path("previewLink").asText())
+          .thumbnail(node.path("thumbnail").asText())
           .build());
       Review review = Review.builder()
           .name("loctran")
@@ -84,10 +102,10 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           .star(1)
           .boilerplate(boilerplate)
           .build();
-      reviewRepository.save(review);
+    /*  reviewRepository.save(review);
       reviewRepository.save(review2);
       reviewRepository.save(review3);
-      reviewRepository.save(review4);
+      reviewRepository.save(review4);*/
 
     }
   }
@@ -168,7 +186,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.datasource.url")
               .title("Url")
-              .defaultValue("jdbc:postgresql://localhost:5432/postgres")
+              .value("jdbc:postgresql://localhost:5432/postgres")
               .toolTip("This is url to connect to your database")
               .dependency(dependency)
               .build()
@@ -178,7 +196,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.datasource.username")
               .title("Url")
-              .defaultValue("root")
+              .value("root")
               .toolTip("This is username to authentication with your database")
               .dependency(dependency)
               .build()
@@ -187,7 +205,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.datasource.password")
               .title("Password")
-              .defaultValue("root")
+              .value("root")
               .toolTip("This is password to authentication with your database")
               .dependency(dependency)
               .build()
@@ -196,7 +214,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.main.web-application-type")
               .title("Application type")
-              .defaultValue("servlet")
+              .value("servlet")
               .toolTip("This is type of application")
               .dependency(dependency)
               .build()
@@ -205,7 +223,8 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.jpa.database-platform")
               .title("Database type")
-              .defaultValue("org.hibernate.dialect.PostgreSQLDialect")
+              .value("org.hibernate.dialect.PostgreSQLDialect")
+              .isDisable(true)
               .toolTip("This is database type of application")
               .dependency(dependency)
               .build()
@@ -214,7 +233,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
           Property.builder()
               .id("spring.jpa.hibernate.ddl-auto")
               .title("Placeholder")
-              .defaultValue("create-drop")
+              .value("create-drop")
               .toolTip("This is placeholder")
               .dependency(dependency)
               .build()
@@ -223,7 +242,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 //					Property.builder()
 //							.id("spring.main.web-application-type")
 //							.title("Application type")
-//							.defaultValue("servlet")
+//							.value("servlet")
 //							.toolTip("This is type of application")
 //							.dependency(dependency)
 //							.build()
@@ -232,7 +251,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
 //					Property.builder()
 //							.id("spring.main.web-application-type")
 //							.title("Application type")
-//							.defaultValue("servlet")
+//							.value("servlet")
 //							.toolTip("This is type of application")
 //							.dependency(dependency)
 //							.build()
@@ -321,7 +340,7 @@ public class BoilerplateServerApplication implements CommandLineRunner {
     for (JsonNode node : nodes) {
       Property property = propertyRepository.save(
           Property.builder().id(node.path("id").asText())
-              .defaultValue(node.path("defaultValue").asText()).title(
+              .value(node.path("value").asText()).title(
                   node.path("title").asText()).toolTip(node.path("toolTip").asText())
               .dependency(dependency).build());
 
