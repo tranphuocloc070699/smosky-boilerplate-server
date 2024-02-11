@@ -1,6 +1,31 @@
 {
   "dependencies": [
     {
+      "name": "General",
+      "content": [
+        {
+          "name": "General",
+          "id": "general",
+          "description": "Default Spring boot configuration",
+          "properties": [
+            {
+              "id": "server.port",
+              "title": "Port",
+              "value": "8080",
+              "toolTip": "This is the port application run"
+            },
+            {
+              "id": "spring.main.web-application-type",
+              "title": "Application type",
+              "value": "servlet",
+              "toolTip": "This is your application type"
+            }
+          ]
+        }
+      ]
+    }
+    ,
+    {
       "name": "Developer Tools",
       "content": [
         {
@@ -524,12 +549,37 @@
           "links": [
             {
               "rel": "guide",
-              "href": "https://spring.io/guides/gs/accessing-data-jpa/",
-              "description": "Accessing Data with JPA"
+              "href": "https://spring.io/guides/gs/accessing-data-jpa/"
             },
             {
-              "rel": "reference",
-              "href": "https://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/index.html#data.sql.jpa-and-spring-data"
+              "rel": "github",
+              "href": "https://github.com/spring-projects/spring-data-jpa"
+            },
+            {
+              "rel": "maven",
+              "href": "https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa"
+            }
+          ],
+          "properties": [
+            {
+              "id": "spring.jpa.hibernate.ddl-auto",
+              "title": "DDL",
+              "value": "create-drop",
+              "toolTip": "This is DDL",
+              "options": [
+                {
+                  "label":"create-drop",
+                  "value": "create-drop"
+                },
+                {
+                  "label":"validate",
+                  "value": "validate"
+                },
+                {
+                  "label":"update",
+                  "value": "update"
+                }
+              ]
             }
           ]
         },
@@ -702,8 +752,49 @@
           "links": [
             {
               "rel": "guide",
-              "href": "https://spring.io/guides/gs/accessing-data-mysql/",
-              "description": "Accessing data with MySQL"
+              "href": "https://spring.io/guides/gs/accessing-data-mysql/"
+            },
+            {
+              "rel": "github",
+              "href": "https://github.com/mysql/mysql-server"
+            },
+            {
+              "rel": "maven",
+              "href": "https://mvnrepository.com/artifact/com.mysql/mysql-connector-j"
+            }
+          ],
+          "properties": [
+            {
+              "id": "spring.datasource.url",
+              "title": "Database url",
+              "value": "jdbc:mysql://localhost:3306/your_database",
+              "toolTip": "JDBC use this url to connect to your database"
+            },
+            {
+              "id": "spring.datasource.username",
+              "title": "Username",
+              "value": "root",
+              "toolTip": "This is username to authentication with your database"
+            },
+            {
+              "id": "spring.datasource.password",
+              "title": "Password",
+              "value": "",
+              "toolTip": "This is password to authentication with your database"
+            },
+            {
+              "id": "spring.jpa.database-platform",
+              "title": "Database platform",
+              "value": "org.hibernate.dialect.MySQL8Dialect",
+              "toolTip": "This is platform driver",
+              "required": true
+            },
+            {
+              "id": "spring.datasource.driver-class-name",
+              "title": "Driver class name",
+              "value": "com.mysql.cj.jdbc.Driver",
+              "toolTip": "This is driver class name",
+              "required": true
             }
           ]
         },
@@ -723,7 +814,34 @@
           "groupId": "org.postgresql",
           "artifactId": "postgresql",
           "scope": "runtime",
-          "starter": false
+          "starter": false,
+          "properties": [
+            {
+              "id": "spring.datasource.url",
+              "title": "Database url",
+              "value": "jdbc:postgresql://localhost:5432/postgres",
+              "toolTip": "JDBC use this url to connect to your database"
+            },
+            {
+              "id": "spring.datasource.username",
+              "title": "Username",
+              "value": "postgres",
+              "toolTip": "This is username to authentication with your database"
+            },
+            {
+              "id": "spring.datasource.password",
+              "title": "Password",
+              "value": "",
+              "toolTip": "This is password to authentication with your database"
+            },
+            {
+              "id": "spring.jpa.database-platform",
+              "title": "Database platform",
+              "value": "org.hibernate.dialect.PostgreSQLDialect",
+              "toolTip": "This is platform driver",
+              "required": true
+            }
+          ]
         }
       ]
     },

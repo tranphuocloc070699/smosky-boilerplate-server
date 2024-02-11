@@ -2,20 +2,22 @@ package com.smosky.boilerplateserver.spring;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
-import java.util.Date;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -25,30 +27,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id")
-public class Review {
-
+public class Tag {
   @Id
   @GeneratedValue
   private Integer id;
 
+  @Column(unique = true)
   private String name;
 
-  private String email;
-
-  private String content;
-
-  private Integer star;
-
-  @ManyToOne
-  @JoinColumn(name = "boilerplate_id")
-  private Boilerplate boilerplate;
-
-  @CreationTimestamp
-  @Column(name = "created_at")
-  private Date createdAt;
-
-  @UpdateTimestamp
-  @Column(name = "updated_at")
-  private Date updatedAt;
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @JoinTable(name = "tag_boilerplate",
+      joinColumns = @JoinColumn(name = "tag_id"),
+      inverseJoinColumns = @JoinColumn(name = "boilerplate_id")
+  )
+  private List<Boilerplate> boilerplates;
 }
-

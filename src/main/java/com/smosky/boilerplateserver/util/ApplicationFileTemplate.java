@@ -13,9 +13,11 @@ public class ApplicationFileTemplate {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
       CustomWriter customWriter = new CustomWriter(writer);
       for (DependencyDto line : arrayList) {
-        customWriter.write("# ", line.getId());
+        if (!line.getProperties().isEmpty()) {
+          customWriter.write("# ", line.getId());
+        }
         for (PropertyDto propertyDto : line.getProperties()) {
-          customWriter.write(propertyDto.getId(), "=", propertyDto.getDefaultValue());
+          customWriter.write(propertyDto.getId(), "=", propertyDto.getValue());
         }
       }
     } catch (IOException e) {

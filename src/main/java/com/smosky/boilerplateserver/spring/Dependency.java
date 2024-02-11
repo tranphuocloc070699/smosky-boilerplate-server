@@ -45,7 +45,6 @@ public class Dependency {
   private DependencyType type;
 
 
-
     @OneToMany(mappedBy = "dependency")
   private List<Property> properties;
 

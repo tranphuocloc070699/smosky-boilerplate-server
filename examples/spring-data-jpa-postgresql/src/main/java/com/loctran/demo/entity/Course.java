@@ -21,9 +21,9 @@ private String name;
 @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 @EqualsAndHashCode.Exclude
 @ToString.Exclude
-@JoinTable(name = "_courseuser",
-                    joinColumns = @JoinColumn(name = "_courseid"),
-                    inverseJoinColumns = @JoinColumn(name = "_userid")
+@JoinTable(name = "course_user",
+                    joinColumns = @JoinColumn(name = "course_id"),
+                    inverseJoinColumns = @JoinColumn(name = "user_id")
                 )
 private List<User> users;
 

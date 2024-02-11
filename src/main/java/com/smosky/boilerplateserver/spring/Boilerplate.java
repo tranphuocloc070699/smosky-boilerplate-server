@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
@@ -34,12 +35,16 @@ public class Boilerplate {
   @GeneratedValue
   private Integer id;
 
+  @Column
   private String name;
 
+  @Column
   private String thumbnail;
 
+  @Column
   private String description;
 
+  @Column
   private String previewLink;
 
   @OneToMany(mappedBy = "boilerplate")
@@ -54,6 +59,9 @@ public class Boilerplate {
   @CollectionTable(name = "boilerplate_features", joinColumns = @JoinColumn(name = "boilerplate_id"))
   @Column(name = "features")
   private List<String> features;
+
+  @ManyToMany(mappedBy = "boilerplates")
+  private List<Tag> tags;
 
   @CreationTimestamp
   @Column(name = "created_at")

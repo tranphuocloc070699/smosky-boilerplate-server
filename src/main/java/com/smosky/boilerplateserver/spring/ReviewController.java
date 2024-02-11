@@ -7,9 +7,11 @@ import com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateEntityDependencyId;
 import com.smosky.boilerplateserver.spring.dtos.CreateReviewDto;
+import com.smosky.boilerplateserver.spring.dtos.CreateReviewResponseDto;
 import com.smosky.boilerplateserver.spring.dtos.DependencyDto;
 import com.smosky.boilerplateserver.spring.dtos.EntityDto;
 import com.smosky.boilerplateserver.spring.dtos.MetadataDto;
+import com.smosky.boilerplateserver.spring.dtos.StarCountDto;
 import com.smosky.boilerplateserver.spring.dtos.TemplateDto;
 import com.smosky.boilerplateserver.util.ApplicationFileTemplate;
 import com.smosky.boilerplateserver.util.CustomWriter;
@@ -71,6 +73,7 @@ public class ReviewController {
   @PostMapping("")
   @CrossOrigin(origins = "http://localhost:3000")
   public Object createReview(@RequestBody CreateReviewDto dto) {
+    System.out.println(dto.getBoilerplateId());
     if (dto.getName().isEmpty() || dto.getBoilerplateId() == null) {
       return null;
     }
@@ -79,14 +82,34 @@ public class ReviewController {
     }
 
     Boilerplate boilerplateExisting = boilerplateRepository.findById(dto.getBoilerplateId()).orElseThrow(() -> new RuntimeException("Boilerplate not found"));
-
-    return reviewRepository.save(Review.builder()
-            .name(dto.getName())
-            .star(dto.getStar())
-            .content(dto.getContent())
-            .email(dto.getEmail())
-            .boilerplate(boilerplateExisting)
+    Review review = reviewRepository.save(Review.builder()
+        .name(dto.getName())
+        .star(dto.getStar())
+        .content(dto.getContent())
+        .email(dto.getEmail())
+        .boilerplate(boilerplateExisting)
         .build());
+
+    StarCountDto starCountDto = boilerplateRepository.findStarCounts(dto.getBoilerplateId());
+
+    CreateReviewResponseDto createReviewResponseDto = CreateReviewResponseDto.builder()
+        .id(review.getId())
+        .name(review.getName())
+        .email(review.getEmail())
+        .content(review.getContent())
+        .star(review.getStar())
+        .createdAt(review.getCreatedAt())
+        .updatedAt(review.getUpdatedAt())
+        .totalReview(starCountDto.getTotalReviews())
+        .starAvg(starCountDto.getStarAvg())
+        .oneStar(starCountDto.getOneStarCount())
+        .twoStar(starCountDto.getTwoStarCount())
+        .threeStar(starCountDto.getThreeStarCount())
+        .fourStar(starCountDto.getFourStarCount())
+        .fiveStar(starCountDto.getFiveStarCount())
+        .build();
+
+    return createReviewResponseDto;
   }
 
   @PostMapping("{id}")

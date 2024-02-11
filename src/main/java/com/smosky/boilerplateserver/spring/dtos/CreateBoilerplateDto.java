@@ -15,14 +15,8 @@ public class CreateBoilerplateDto {
     private String type;
     private String bootVersion;
     private MetadataDto metadata;
-
     private List<DependencyDto> dependencies;
-
     private List<EntityDto> entities;
-
-
+    private Boolean crud;
 }
 
-//    String queryParams = "bootVersion=3.2.1&type=maven-project&packaging=jar&jvmVersion=17" +
-//        "&groupId=com.loctran&artifactId=demo&name=demo&description=description" +
-//        "&dependencies=lombok,web,data-jpa,postgresql";

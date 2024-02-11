@@ -1,5 +1,6 @@
 package com.smosky.boilerplateserver.spring.dtos;
 
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,6 @@ public class ReviewDto {
   String email;
   String content;
   Integer star;
+  Date createdAt;
+  Date updatedAt;
 }
