@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
         .path(webRequest.getContextPath())
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
         .message("Process failure!")
         .errors(exception.getMessage())
         .data(null)
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
         .path(webRequest.getContextPath())
-        .status(HttpStatus.NOT_FOUND)
+        .status(HttpStatus.NOT_FOUND.value())
         .message("Process failure!")
         .errors(exception.getMessage())
         .data(null)
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
         .path(webRequest.getContextPath())
-        .status(HttpStatus.CONFLICT)
+        .status(HttpStatus.CONFLICT.value())
         .message("Process failure!")
         .errors(exception.getMessage())
         .data(null)
@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
       WebRequest webRequest) {
     ResponseDto responseDto = ResponseDto.builder()
         .path(webRequest.getContextPath())
-        .status(HttpStatus.BAD_REQUEST)
+        .status(HttpStatus.BAD_REQUEST.value())
         .message("Process failure!")
         .errors(exception.getMessage())
         .data(null)

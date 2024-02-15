@@ -34,7 +34,7 @@ public class BlogService {
 
     ResponseDto responseDto = ResponseDto.builder()
         .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK)
+        .status(HttpStatus.OK.value())
         .message("fetch all post successfully!")
         .data(posts)
         .build();
@@ -49,7 +49,7 @@ public class BlogService {
 
     ResponseDto responseDto = ResponseDto.builder()
         .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK)
+        .status(HttpStatus.OK.value())
         .message("fetch post successfully!")
         .data(post)
         .build();
@@ -64,7 +64,7 @@ public class BlogService {
     blogRepository.delete(post);
     ResponseDto responseDto = ResponseDto.builder()
         .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK)
+        .status(HttpStatus.OK.value())
         .message("delete post successfully!")
         .data(post)
         .build();
@@ -93,7 +93,7 @@ public class BlogService {
 
     ResponseDto responseDto = ResponseDto.builder()
         .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK)
+        .status(HttpStatus.OK.value())
         .message("create post successfully!")
         .data(post)
         .build();
@@ -135,7 +135,7 @@ public class BlogService {
     map.put("affects", affects);
     ResponseDto responseDto = ResponseDto.builder()
         .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK)
+        .status(HttpStatus.OK.value())
         .message("update post successfully!")
         .data(map)
         .build();
