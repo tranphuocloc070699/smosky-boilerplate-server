@@ -158,7 +158,6 @@ public class SpringBoilerplateService {
   }
 
   public Object previewBoilerplate(CreateBoilerplateDto dto) {
-    System.out.println(dto.getCrud());
 
     String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
     String zipFileName = "zip/" + randomName + ".zip";
