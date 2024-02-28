@@ -6,7 +6,7 @@
         {
           "name": "General",
           "id": "general",
-          "description": "Default Spring boot configuration",
+          "description": "Default spring configuration",
           "properties": [
             {
               "id": "server.port",

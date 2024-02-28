@@ -8,7 +8,6 @@
     "features": [
       "RESTful api endpoints",
       "Customizable Data models",
-      "Auto generate docker file",
       "Auto generate application.properties key"
     ],
     "tags": [

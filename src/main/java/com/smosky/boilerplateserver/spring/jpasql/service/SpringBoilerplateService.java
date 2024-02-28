@@ -7,41 +7,10 @@ import com.smosky.boilerplateserver.spring.BoilerplateRepository;
 import com.smosky.boilerplateserver.spring.ReviewRepository;
 import com.smosky.boilerplateserver.spring.Tag;
 import com.smosky.boilerplateserver.spring.TagRepository;
-import com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto;
-import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
-import com.smosky.boilerplateserver.spring.dtos.DependencyDto;
-import com.smosky.boilerplateserver.spring.dtos.DownloadPreviewRequestDto;
-import com.smosky.boilerplateserver.spring.dtos.EntityDto;
-import com.smosky.boilerplateserver.spring.dtos.MetadataDto;
-import com.smosky.boilerplateserver.util.ApplicationFileTemplate;
-import com.smosky.boilerplateserver.util.ControllerTemplate;
-import com.smosky.boilerplateserver.util.DaoTemplate;
-import com.smosky.boilerplateserver.util.DtoTemplate;
-import com.smosky.boilerplateserver.util.EntityTemplate;
-import com.smosky.boilerplateserver.util.ExceptionTemplate;
-import com.smosky.boilerplateserver.util.MapperTemplate;
-import com.smosky.boilerplateserver.util.RepositoryTemplate;
-import com.smosky.boilerplateserver.util.ServiceTemplate;
+import com.smosky.boilerplateserver.spring.dtos.*;
+import com.smosky.boilerplateserver.util.*;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -52,75 +21,78 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class SpringBoilerplateService {
-
+  
   private final HttpServletRequest httpServletRequest;
   private final BoilerplateRepository boilerplateRepository;
   private final TagRepository tagRepository;
   private final ReviewRepository reviewRepository;
   private final FileService fileService;
   private final DataStorage dataStorage;
-
+  
   public ResponseEntity<ResponseDto> fetchAllBoilerplate() {
     var boilerplateData = boilerplateRepository.findAllWithStarCounting();
     List<Tag> tags = tagRepository.findAll();
     Map<String, Object> map = new HashMap<>();
     map.put("boilerplates", boilerplateData);
     map.put("tags", tags);
-
+    
     ResponseDto responseDto = ResponseDto.builder()
-        .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK.value())
-        .message("fetch all boilerplate successfully!")
-        .data(map)
-        .build();
+            .path(httpServletRequest.getServletPath())
+            .status(HttpStatus.OK.value())
+            .message("fetch all boilerplate successfully!")
+            .data(map)
+            .build();
     return ResponseEntity.ok(responseDto);
   }
-
+  
   public ResponseEntity<ResponseDto> fetchBoilerplateDetail(String name) {
     try {
       BoilerplateDetailDto dto = boilerplateRepository.findByName(name);
       dto.setReviews(reviewRepository.findAllByBoilerplateId(dto.getId()));
       dto.setProjectStructure(fileService.getNode(new File("examples/spring-data-jpa-postgresql")));
-
+      
       dto.setDependencies(dataStorage.getDependencyTypes());
-
+      
       dto.setDependenciesSelected(
-          convertDuplicatedStringToList(dto.getDependenciesSelected().toString()));
+              convertDuplicatedStringToList(dto.getDependenciesSelected().toString()));
       dto.setFeatures(convertDuplicatedStringToList(dto.getFeatures().toString()));
-
+      
       ResponseDto responseDto = ResponseDto.builder()
-          .path(httpServletRequest.getServletPath())
-          .status(HttpStatus.OK.value())
-          .message("fetch boilerplate successfully!")
-          .data(dto)
-          .build();
+              .path(httpServletRequest.getServletPath())
+              .status(HttpStatus.OK.value())
+              .message("fetch boilerplate successfully!")
+              .data(dto)
+              .build();
       return ResponseEntity.ok(responseDto);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
-
+  
   private List<String> convertDuplicatedStringToList(String input) {
     String[] splitStrings = input.split(", ");
-
+    
     // Step 2: Convert the array of split strings into a list
     List<String> listOfStrings = Arrays.asList(splitStrings);
-
+    
     // Step 3: Use a Set to remove duplicates
     Set<String> setOfStrings = new HashSet<>(listOfStrings);
-
+    
     // Step 4: Convert the Set back to a list if needed
     List<String> uniqueList = setOfStrings.stream().toList();
-
+    
     return uniqueList;
   }
-
-
-
-
+  
+  
   public ResponseEntity downloadBoilerplate(CreateBoilerplateDto dto) {
     String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
     String zipFileName = "zip/" + randomName + ".zip";
@@ -130,35 +102,35 @@ public class SpringBoilerplateService {
     if (!newFolder.exists()) {
       newFolder.mkdir();
     }
-
+    
     byte[] responseBody = downloadTemplateFromStartSpringIo(dto);
-
+    
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
-
+        
         ZipFile zipFolderToFile = getFile(dto, zipFileName, responseBody,
-            extractFileName, zipFileResponse);
+                extractFileName, zipFileResponse);
         InputStreamResource resource = new InputStreamResource(
-            new FileInputStream(zipFileResponse));
+                new FileInputStream(zipFileResponse));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", zipFolderToFile.getFile().getName());
         InputStream inputStream = new ByteArrayInputStream(
-            resource.getInputStream().readAllBytes());
+                resource.getInputStream().readAllBytes());
         return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
-
+        
       } catch (IOException e) {
         throw new RuntimeException(e.getMessage());
       }
     } else {
-
+      
       throw new RuntimeException("Cannot download spring template from start.spring.io");
     }
   }
-
+  
   public Object previewBoilerplate(CreateBoilerplateDto dto) {
-
+    
     String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
     String zipFileName = "zip/" + randomName + ".zip";
     String zipFileResponse = "zip-response/" + randomName + ".zip";
@@ -173,13 +145,13 @@ public class SpringBoilerplateService {
     if (responseBody != null) {
       // Save the response to a file (my-project.zip)
       try {
-
+        
         /* Write .zip file from start.spring.io to folder */
         getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
         Map<String, Object> map = new HashMap<>();
         map.put("projectStructure", fileService.getNode(new File(extractFileName)));
         map.put("downloadUrl", zipFileResponse);
-
+        
         return ResponseEntity.ok(map);
       } catch (IOException e) {
         e.printStackTrace();
@@ -189,106 +161,124 @@ public class SpringBoilerplateService {
     }
     return true;
   }
-
-
+  
+  
   private String getString(CreateBoilerplateDto dto, StringBuilder dependencies) {
     MetadataDto metadataDto = dto.getMetadata();
     String apiUrl = "https://start.spring.io/starter.zip";
+//    String apiUrl = "https://start.spring.io/#!";
+/*
     String queryParams = String.format("bootVersion=%s&type=%s&packaging=%s&jvmVersion=%d"
-            + "&groupId=%s&artifactId=%s&name=%s&description=%s" + "&dependencies=%s",
-        dto.getBootVersion(), dto.getType(), metadataDto.getPackaging(),
-        metadataDto.getJvmVersion(), metadataDto.getGroupId(), metadataDto.getArtifactId(),
-        metadataDto.getName(), metadataDto.getDescription(), dependencies);
+                    + "&groupId=%s&artifactId=%s&name=%s&description=%s" + "&dependencies=%s",
+            dto.getBootVersion(), dto.getType(), metadataDto.getPackaging(),
+            metadataDto.getJvmVersion(), metadataDto.getGroupId(), metadataDto.getArtifactId(),
+            metadataDto.getName(), metadataDto.getDescription(), dependencies);
+*/
+    String packageName = metadataDto.getGroupId()+"."+metadataDto.getArtifactId();
+    String queryParams = String.format("packageName=%s&language=java&bootVersion=%s&type=%s&packaging=%s&javaVersion=%d"
+                    + "&groupId=%s&artifactId=%s&name=%s&description=%s" + "&dependencies=%s",
+            packageName,dto.getBootVersion(), dto.getType(), metadataDto.getPackaging(),
+            metadataDto.getJvmVersion(), metadataDto.getGroupId(), metadataDto.getArtifactId(),
+            metadataDto.getName(), metadataDto.getDescription(), dependencies);
+    
     String urlString = apiUrl + "?" + queryParams;
     return urlString;
   }
-
-  private byte[] downloadTemplateFromStartSpringIo(CreateBoilerplateDto dto){
+  
+  private byte[] downloadTemplateFromStartSpringIo(CreateBoilerplateDto dto) {
     StringBuilder dependencies = new StringBuilder();
     List<DependencyDto> dependencyDtos = dto.getDependencies();
     for (DependencyDto dependencyDto : dependencyDtos) {
+      if(dependencyDto.getId().equals("general")){
+        continue;
+      }
       dependencies.append(",").append(dependencyDto.getId());
     }
     /*remove first char ','*/
     dependencies.delete(0, 1);
-
+    
     String urlString = getString(dto, dependencies);
     WebClient webClient = WebClient.create();
-    return webClient.get()
-        .uri(urlString)
-        .retrieve()
-        .bodyToMono(byte[].class)
-        .block();
+    try {
+      return webClient.get()
+              .uri(urlString)
+              .retrieve()
+              .bodyToMono(byte[].class)
+              .block();
+    } catch (RuntimeException e) {
+      System.out.println("Download template error: " + e.getMessage());
+      throw new RuntimeException(e.getMessage());
+    }
   }
   
   public Object downloadBoilerplateFromUrl(DownloadPreviewRequestDto dto) {
     InputStreamResource resource = null;
     try {
       resource = new InputStreamResource(
-          new FileInputStream(dto.getDownloadUrl()));
+              new FileInputStream(dto.getDownloadUrl()));
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
       headers.setContentDispositionFormData("attachment", "file");
       InputStream inputStream = new ByteArrayInputStream(
-          resource.getInputStream().readAllBytes());
+              resource.getInputStream().readAllBytes());
       return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
-
+  
   private ZipFile getFile(CreateBoilerplateDto dto, String zipFileName, byte[] responseBody,
-      String extractFileName, String zipFileResponse) throws IOException {
+                          String extractFileName, String zipFileResponse) throws IOException {
     /* Write .zip file from start.spring.io to folder */
     Files.write(Path.of(zipFileName), responseBody);
-
+    
     /* Extract .zip file */
     ZipFile zipFile = new ZipFile(zipFileName);
     zipFile.extractAll(extractFileName);
-
+    
     /*
      * Validate value
      * */
-
+    
     /* Write config to application.properties */
     File file = new File(extractFileName + "/src/main/resources/application.properties");
     ApplicationFileTemplate.writeArrayListToFile(dto.getDependencies(),
-        file.toPath().toString());
-
+            file.toPath().toString());
+    
     /*Package*/
     String packagePath =
-        extractFileName + "/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
-            + "/" + dto.getMetadata().getArtifactId();
-
+            extractFileName + "/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
+                    + "/" + dto.getMetadata().getArtifactId();
+    
     String packageName =
-        dto.getMetadata().getGroupId() + "." + dto.getMetadata().getArtifactId();
-
+            dto.getMetadata().getGroupId() + "." + dto.getMetadata().getArtifactId();
+    
     /*Dto*/
     String dtoFolderPath = packagePath + "/dto";
     File dtoFolder = new File(dtoFolderPath);
     dtoFolder.mkdir();
-
+    
     String dtoPackagePath = "package " + packageName + ".dto";
     String responseDtoFilePath = dtoFolderPath + "/ResponseDto.java";
-
+    
     /*Response Dto*/
     DtoTemplate.createResponseDto(dtoPackagePath, responseDtoFilePath);
-
+    
     /*Mapper*/
     String mapperFolderPath = packagePath + "/mapper";
     File mapperFolder = new File(mapperFolderPath);
     mapperFolder.mkdir();
-
+    
     /*Repository*/
     String repositoryFolderPath = packagePath + "/repository";
     File repositoryFolder = new File(repositoryFolderPath);
     repositoryFolder.mkdir();
-
+    
     /*Dao*/
     String daoFolderPath = packagePath + "/dao";
     File daoFolder = new File(daoFolderPath);
     daoFolder.mkdir();
-
+    
     String serviceFolderPath = "";
     String controllerFolderPath = "";
     if (dto.getCrud()) {
@@ -296,13 +286,13 @@ public class SpringBoilerplateService {
       serviceFolderPath = packagePath + "/service";
       File serviceFolder = new File(serviceFolderPath);
       serviceFolder.mkdir();
-
+      
       /*Controller*/
       controllerFolderPath = packagePath + "/controller";
       File controllerFolder = new File(controllerFolderPath);
       controllerFolder.mkdir();
     }
-
+    
     for (EntityDto entityDto : dto.getEntities()) {
       /*Entity */
       String entitiesPath = packagePath + "/entity";
@@ -318,45 +308,45 @@ public class SpringBoilerplateService {
       String mapperFilePath = mapperFolderPath + "/" + entityDto.getName() + "Mapper" + ".java";
       String mapperPackagePath = "package " + packageName + ".mapper";
       MapperTemplate.createMapperFile(packageName, entityDto, mapperPackagePath,
-          mapperFilePath);
-
+              mapperFilePath);
+      
       /*Repository*/
       String repositoryFilePath =
-          repositoryFolderPath + "/" + entityDto.getName() + "Repository" + ".java";
+              repositoryFolderPath + "/" + entityDto.getName() + "Repository" + ".java";
       String repositoryPackagePath = "package " + packageName + ".repository";
       RepositoryTemplate.createRepositoryFile(packageName, entityDto, repositoryFilePath,
-          repositoryPackagePath);
+              repositoryPackagePath);
       /*Dao*/
       String daoFilePath = daoFolderPath + "/" + entityDto.getName() + "DataAccess" + ".java";
       String daoPackagePath = "package " + packageName + ".dao";
       DaoTemplate.createDaoFile(packageName, entityDto, daoFilePath, daoPackagePath);
-
+      
       if (dto.getCrud()) {
         /*Service*/
         String serviceFilePath =
-            serviceFolderPath + "/" + entityDto.getName() + "Service" + ".java";
+                serviceFolderPath + "/" + entityDto.getName() + "Service" + ".java";
         String servicePackagePath = "package " + packageName + ".service";
         ServiceTemplate.createServiceFile(packageName, entityDto, serviceFilePath,
-            servicePackagePath);
-
+                servicePackagePath);
+        
         /*Controller*/
         String controllerFilePath =
-            controllerFolderPath + "/" + entityDto.getName() + "Controller" + ".java";
+                controllerFolderPath + "/" + entityDto.getName() + "Controller" + ".java";
         String controllerPackagePath = "package " + packageName + ".controller";
         ControllerTemplate.createControllerFile(packageName, entityDto, controllerFilePath,
-            controllerPackagePath);
+                controllerPackagePath);
       }
     }
     /*Exception*/
     File exceptionSource = new File("shared/exception");
     File exceptionDir = new File(packagePath + "/exception");
     FileUtils.copyDirectory(exceptionSource, exceptionDir);
-
+    
     String exceptionPackagePath = "package " + packageName + ".exception;";
     String responseDtoPath = packageName + ".dto" + ".ResponseDto";
     ExceptionTemplate.writePackageToExceptionFile(exceptionDir.getPath(), exceptionPackagePath,
-        responseDtoPath);
-
+            responseDtoPath);
+    
     /*Zip folder to file*/
     ZipFile zipFolderToFile = new ZipFile(zipFileResponse);
     zipFolderToFile.addFolder(new File(extractFileName));
