@@ -241,6 +241,7 @@ public class SpringBoilerplateService {
       ZipFile zipFile = new ZipFile(zipFileName);
       zipFile.extractAll(extractFileName);
 
+      System.out.println("extract all success");
       /*
        * Validate value
        * */
