@@ -1,6 +1,8 @@
 package com.smosky.boilerplateserver.spring.jpasql.service;
 
 import com.smosky.boilerplateserver.database.DataStorage;
+import com.smosky.boilerplateserver.exception.ConflictException;
+import com.smosky.boilerplateserver.exception.ResourceNotFoundException;
 import com.smosky.boilerplateserver.shared.FileService;
 import com.smosky.boilerplateserver.shared.ResponseDto;
 import com.smosky.boilerplateserver.spring.BoilerplateRepository;
@@ -130,36 +132,32 @@ public class SpringBoilerplateService {
   }
   
   public Object previewBoilerplate(CreateBoilerplateDto dto) {
-    
-    String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
-    String zipFileName = "zip/" + randomName + ".zip";
-    String zipFileResponse = "zip-response/" + randomName + ".zip";
-    String extractFileName = "extract-zip" + "/" + randomName;
-    File newFolder = new File(extractFileName);
-    if (!newFolder.exists()) {
-      newFolder.mkdir();
-    }
-    
-    
-    byte[] responseBody = downloadTemplateFromStartSpringIo(dto);
-    if (responseBody != null) {
-      // Save the response to a file (my-project.zip)
-      try {
-        
-        /* Write .zip file from start.spring.io to folder */
-        getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
-        Map<String, Object> map = new HashMap<>();
-        map.put("projectStructure", fileService.getNode(new File(extractFileName)));
-        map.put("downloadUrl", zipFileResponse);
-        
-        return ResponseEntity.ok(map);
-      } catch (IOException e) {
-        e.printStackTrace();
+
+    try {
+      String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
+      String zipFileName = "zip/" + randomName + ".zip";
+      String zipFileResponse = "zip-response/" + randomName + ".zip";
+      String extractFileName = "extract-zip" + "/" + randomName;
+      File newFolder = new File(extractFileName);
+      if (!newFolder.exists()) {
+        newFolder.mkdir();
       }
-    } else {
-      System.out.println("Failed to download.");
+      byte[] responseBody = downloadTemplateFromStartSpringIo(dto);
+      if (responseBody != null) {
+        // Save the response to a file (my-project.zip)
+          /* Write .zip file from start.spring.io to folder */
+          getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
+          Map<String, Object> map = new HashMap<>();
+          map.put("projectStructure", fileService.getNode(new File(extractFileName)));
+          map.put("downloadUrl", zipFileResponse);
+          return ResponseEntity.ok(map);
+      } else {
+        throw new ConflictException("Fail to download");
+      }
+    }catch (RuntimeException | IOException e){
+      throw new RuntimeException(e.getMessage());
     }
-    return true;
+
   }
   
   
