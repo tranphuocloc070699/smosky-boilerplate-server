@@ -196,6 +196,7 @@ public class SpringBoilerplateService {
     dependencies.delete(0, 1);
     
     String urlString = getString(dto, dependencies);
+    System.out.println(urlString);
     WebClient webClient = WebClient.create();
     try {
       return webClient.get()
