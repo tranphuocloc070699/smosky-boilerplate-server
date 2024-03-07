@@ -1,6 +1,8 @@
 package com.smosky.boilerplateserver.spring.jpasql.service;
 
 import com.smosky.boilerplateserver.database.DataStorage;
+import com.smosky.boilerplateserver.exception.ConflictException;
+import com.smosky.boilerplateserver.exception.ResourceNotFoundException;
 import com.smosky.boilerplateserver.shared.FileService;
 import com.smosky.boilerplateserver.shared.ResponseDto;
 import com.smosky.boilerplateserver.spring.BoilerplateRepository;
@@ -130,36 +132,35 @@ public class SpringBoilerplateService {
   }
   
   public Object previewBoilerplate(CreateBoilerplateDto dto) {
-    
-    String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
-    String zipFileName = "zip/" + randomName + ".zip";
-    String zipFileResponse = "zip-response/" + randomName + ".zip";
-    String extractFileName = "extract-zip" + "/" + randomName;
-    File newFolder = new File(extractFileName);
-    if (!newFolder.exists()) {
-      newFolder.mkdir();
-    }
-    
-    
-    byte[] responseBody = downloadTemplateFromStartSpringIo(dto);
-    if (responseBody != null) {
-      // Save the response to a file (my-project.zip)
-      try {
-        
-        /* Write .zip file from start.spring.io to folder */
-        getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
-        Map<String, Object> map = new HashMap<>();
-        map.put("projectStructure", fileService.getNode(new File(extractFileName)));
-        map.put("downloadUrl", zipFileResponse);
-        
-        return ResponseEntity.ok(map);
-      } catch (IOException e) {
-        e.printStackTrace();
+
+    try {
+      String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
+      String zipFileName = "zip/" + randomName + ".zip";
+      String zipFileResponse = "zip-response/" + randomName + ".zip";
+      String extractFileName = "extract-zip" + "/" + randomName;
+      File newFolder = new File(extractFileName);
+      if (!newFolder.exists()) {
+        newFolder.mkdir();
       }
-    } else {
-      System.out.println("Failed to download.");
+      byte[] responseBody = downloadTemplateFromStartSpringIo(dto);
+      if (responseBody != null) {
+        // Save the response to a file (my-project.zip)
+          /* Write .zip file from start.spring.io to folder */
+        System.out.println("Get reponse not null");
+          getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
+
+        System.out.println("get file success");
+          Map<String, Object> map = new HashMap<>();
+          map.put("projectStructure", fileService.getNode(new File(extractFileName)));
+          map.put("downloadUrl", zipFileResponse);
+          return ResponseEntity.ok(map);
+      } else {
+        throw new ConflictException("Fail to download");
+      }
+    }catch (RuntimeException | IOException e){
+      throw new RuntimeException(e.getMessage());
     }
-    return true;
+
   }
   
   
@@ -198,6 +199,7 @@ public class SpringBoilerplateService {
     dependencies.delete(0, 1);
     
     String urlString = getString(dto, dependencies);
+    System.out.println(urlString);
     WebClient webClient = WebClient.create();
     try {
       return webClient.get()
@@ -229,127 +231,136 @@ public class SpringBoilerplateService {
   
   private ZipFile getFile(CreateBoilerplateDto dto, String zipFileName, byte[] responseBody,
                           String extractFileName, String zipFileResponse) throws IOException {
-    /* Write .zip file from start.spring.io to folder */
-    Files.write(Path.of(zipFileName), responseBody);
-    
-    /* Extract .zip file */
-    ZipFile zipFile = new ZipFile(zipFileName);
-    zipFile.extractAll(extractFileName);
-    
-    /*
-     * Validate value
-     * */
-    
-    /* Write config to application.properties */
-    File file = new File(extractFileName + "/src/main/resources/application.properties");
-    ApplicationFileTemplate.writeArrayListToFile(dto.getDependencies(),
-            file.toPath().toString());
-    
-    /*Package*/
-    String packagePath =
-            extractFileName + "/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
-                    + "/" + dto.getMetadata().getArtifactId();
-    
-    String packageName =
-            dto.getMetadata().getGroupId() + "." + dto.getMetadata().getArtifactId();
-    
-    /*Dto*/
-    String dtoFolderPath = packagePath + "/dto";
-    File dtoFolder = new File(dtoFolderPath);
-    dtoFolder.mkdir();
-    
-    String dtoPackagePath = "package " + packageName + ".dto";
-    String responseDtoFilePath = dtoFolderPath + "/ResponseDto.java";
-    
-    /*Response Dto*/
-    DtoTemplate.createResponseDto(dtoPackagePath, responseDtoFilePath);
-    
-    /*Mapper*/
-    String mapperFolderPath = packagePath + "/mapper";
-    File mapperFolder = new File(mapperFolderPath);
-    mapperFolder.mkdir();
-    
-    /*Repository*/
-    String repositoryFolderPath = packagePath + "/repository";
-    File repositoryFolder = new File(repositoryFolderPath);
-    repositoryFolder.mkdir();
-    
-    /*Dao*/
-    String daoFolderPath = packagePath + "/dao";
-    File daoFolder = new File(daoFolderPath);
-    daoFolder.mkdir();
-    
-    String serviceFolderPath = "";
-    String controllerFolderPath = "";
-    if (dto.getCrud()) {
-      /*Service*/
-      serviceFolderPath = packagePath + "/service";
-      File serviceFolder = new File(serviceFolderPath);
-      serviceFolder.mkdir();
-      
-      /*Controller*/
-      controllerFolderPath = packagePath + "/controller";
-      File controllerFolder = new File(controllerFolderPath);
-      controllerFolder.mkdir();
-    }
-    
-    for (EntityDto entityDto : dto.getEntities()) {
-      /*Entity */
-      String entitiesPath = packagePath + "/entity";
-      File entitiesFolder = new File(entitiesPath);
-      entitiesFolder.mkdir();
-      String packageEntityName = "package " + packageName + ".entity";
-      String entityPath = entitiesPath + "/" + entityDto.getName() + ".java";
-      EntityTemplate.createEntityTemplate(entityDto, packageEntityName, entityPath);
+    try {
+
+      /* Write .zip file from start.spring.io to folder */
+      System.out.println("write file processing...");
+      Files.write(Path.of(zipFileName), responseBody);
+
+      /* Extract .zip file */
+      ZipFile zipFile = new ZipFile(zipFileName);
+      zipFile.extractAll(extractFileName);
+
+      System.out.println("extract all success");
+      /*
+       * Validate value
+       * */
+
+      /* Write config to application.properties */
+      File file = new File(extractFileName + "/src/main/resources/application.properties");
+      ApplicationFileTemplate.writeArrayListToFile(dto.getDependencies(),
+          file.toPath().toString());
+
+      /*Package*/
+      String packagePath =
+          extractFileName + "/src/main/java/" + dto.getMetadata().getGroupId().replace(".", "/")
+              + "/" + dto.getMetadata().getArtifactId();
+
+      String packageName =
+          dto.getMetadata().getGroupId() + "." + dto.getMetadata().getArtifactId();
+
       /*Dto*/
-      String dtoFilePath = dtoFolderPath + "/" + entityDto.getName() + "Dto" + ".java";
-      DtoTemplate.createDto(entityDto, dtoPackagePath, dtoFilePath);
+      String dtoFolderPath = packagePath + "/dto";
+      File dtoFolder = new File(dtoFolderPath);
+      dtoFolder.mkdir();
+
+      String dtoPackagePath = "package " + packageName + ".dto";
+      String responseDtoFilePath = dtoFolderPath + "/ResponseDto.java";
+
+      /*Response Dto*/
+      DtoTemplate.createResponseDto(dtoPackagePath, responseDtoFilePath);
+
       /*Mapper*/
-      String mapperFilePath = mapperFolderPath + "/" + entityDto.getName() + "Mapper" + ".java";
-      String mapperPackagePath = "package " + packageName + ".mapper";
-      MapperTemplate.createMapperFile(packageName, entityDto, mapperPackagePath,
-              mapperFilePath);
-      
+      String mapperFolderPath = packagePath + "/mapper";
+      File mapperFolder = new File(mapperFolderPath);
+      mapperFolder.mkdir();
+
       /*Repository*/
-      String repositoryFilePath =
-              repositoryFolderPath + "/" + entityDto.getName() + "Repository" + ".java";
-      String repositoryPackagePath = "package " + packageName + ".repository";
-      RepositoryTemplate.createRepositoryFile(packageName, entityDto, repositoryFilePath,
-              repositoryPackagePath);
+      String repositoryFolderPath = packagePath + "/repository";
+      File repositoryFolder = new File(repositoryFolderPath);
+      repositoryFolder.mkdir();
+
       /*Dao*/
-      String daoFilePath = daoFolderPath + "/" + entityDto.getName() + "DataAccess" + ".java";
-      String daoPackagePath = "package " + packageName + ".dao";
-      DaoTemplate.createDaoFile(packageName, entityDto, daoFilePath, daoPackagePath);
-      
+      String daoFolderPath = packagePath + "/dao";
+      File daoFolder = new File(daoFolderPath);
+      daoFolder.mkdir();
+
+      String serviceFolderPath = "";
+      String controllerFolderPath = "";
       if (dto.getCrud()) {
         /*Service*/
-        String serviceFilePath =
-                serviceFolderPath + "/" + entityDto.getName() + "Service" + ".java";
-        String servicePackagePath = "package " + packageName + ".service";
-        ServiceTemplate.createServiceFile(packageName, entityDto, serviceFilePath,
-                servicePackagePath);
-        
+        serviceFolderPath = packagePath + "/service";
+        File serviceFolder = new File(serviceFolderPath);
+        serviceFolder.mkdir();
+
         /*Controller*/
-        String controllerFilePath =
-                controllerFolderPath + "/" + entityDto.getName() + "Controller" + ".java";
-        String controllerPackagePath = "package " + packageName + ".controller";
-        ControllerTemplate.createControllerFile(packageName, entityDto, controllerFilePath,
-                controllerPackagePath);
+        controllerFolderPath = packagePath + "/controller";
+        File controllerFolder = new File(controllerFolderPath);
+        controllerFolder.mkdir();
       }
+
+      for (EntityDto entityDto : dto.getEntities()) {
+        /*Entity */
+        String entitiesPath = packagePath + "/entity";
+        File entitiesFolder = new File(entitiesPath);
+        entitiesFolder.mkdir();
+        String packageEntityName = "package " + packageName + ".entity";
+        String entityPath = entitiesPath + "/" + entityDto.getName() + ".java";
+        EntityTemplate.createEntityTemplate(entityDto, packageEntityName, entityPath);
+        /*Dto*/
+        String dtoFilePath = dtoFolderPath + "/" + entityDto.getName() + "Dto" + ".java";
+        DtoTemplate.createDto(entityDto, dtoPackagePath, dtoFilePath);
+        /*Mapper*/
+        String mapperFilePath = mapperFolderPath + "/" + entityDto.getName() + "Mapper" + ".java";
+        String mapperPackagePath = "package " + packageName + ".mapper";
+        MapperTemplate.createMapperFile(packageName, entityDto, mapperPackagePath,
+            mapperFilePath);
+
+        /*Repository*/
+        String repositoryFilePath =
+            repositoryFolderPath + "/" + entityDto.getName() + "Repository" + ".java";
+        String repositoryPackagePath = "package " + packageName + ".repository";
+        RepositoryTemplate.createRepositoryFile(packageName, entityDto, repositoryFilePath,
+            repositoryPackagePath);
+        /*Dao*/
+        String daoFilePath = daoFolderPath + "/" + entityDto.getName() + "DataAccess" + ".java";
+        String daoPackagePath = "package " + packageName + ".dao";
+        DaoTemplate.createDaoFile(packageName, entityDto, daoFilePath, daoPackagePath);
+
+        if (dto.getCrud()) {
+          /*Service*/
+          String serviceFilePath =
+              serviceFolderPath + "/" + entityDto.getName() + "Service" + ".java";
+          String servicePackagePath = "package " + packageName + ".service";
+          ServiceTemplate.createServiceFile(packageName, entityDto, serviceFilePath,
+              servicePackagePath);
+
+          /*Controller*/
+          String controllerFilePath =
+              controllerFolderPath + "/" + entityDto.getName() + "Controller" + ".java";
+          String controllerPackagePath = "package " + packageName + ".controller";
+          ControllerTemplate.createControllerFile(packageName, entityDto, controllerFilePath,
+              controllerPackagePath);
+        }
+      }
+      /*Exception*/
+      File exceptionSource = new File("shared/exception");
+      File exceptionDir = new File(packagePath + "/exception");
+      FileUtils.copyDirectory(exceptionSource, exceptionDir);
+
+      String exceptionPackagePath = "package " + packageName + ".exception;";
+      String responseDtoPath = packageName + ".dto" + ".ResponseDto";
+      ExceptionTemplate.writePackageToExceptionFile(exceptionDir.getPath(), exceptionPackagePath,
+          responseDtoPath);
+
+      /*Zip folder to file*/
+      ZipFile zipFolderToFile = new ZipFile(zipFileResponse);
+      zipFolderToFile.addFolder(new File(extractFileName));
+      return zipFolderToFile;
+    } catch (RuntimeException exception) {
+      System.out.println("get File Error:" + exception.getMessage());
+      throw new RuntimeException(exception.getMessage());
     }
-    /*Exception*/
-    File exceptionSource = new File("shared/exception");
-    File exceptionDir = new File(packagePath + "/exception");
-    FileUtils.copyDirectory(exceptionSource, exceptionDir);
-    
-    String exceptionPackagePath = "package " + packageName + ".exception;";
-    String responseDtoPath = packageName + ".dto" + ".ResponseDto";
-    ExceptionTemplate.writePackageToExceptionFile(exceptionDir.getPath(), exceptionPackagePath,
-            responseDtoPath);
-    
-    /*Zip folder to file*/
-    ZipFile zipFolderToFile = new ZipFile(zipFileResponse);
-    zipFolderToFile.addFolder(new File(extractFileName));
-    return zipFolderToFile;
+
   }
 }

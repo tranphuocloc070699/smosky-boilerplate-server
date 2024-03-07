@@ -65,13 +65,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RestController
 @RequestMapping("/review")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
 public class ReviewController {
   private final ReviewRepository reviewRepository;
   private final BoilerplateRepository boilerplateRepository;
 
   @PostMapping("")
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
   public Object createReview(@RequestBody CreateReviewDto dto) {
     System.out.println(dto.getBoilerplateId());
     if (dto.getName().isEmpty() || dto.getBoilerplateId() == null) {
@@ -113,7 +113,7 @@ public class ReviewController {
   }
 
   @PostMapping("{id}")
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
   public Object deleteReview(@PathVariable("id")String id) {
     Integer idConverter = Integer.parseInt(id);
 

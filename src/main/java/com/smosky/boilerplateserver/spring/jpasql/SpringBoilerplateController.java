@@ -40,7 +40,7 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 @RestController
 @RequestMapping("/spring")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
 public class SpringBoilerplateController {
 
   private final DependencyRepository repository;
@@ -109,7 +109,7 @@ public class SpringBoilerplateController {
   }
 
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins ={"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("")
   public ResponseEntity boilerplate(@RequestBody CreateBoilerplateDto dto) {
     return springBoilerplateService.downloadBoilerplate(dto);
@@ -117,13 +117,13 @@ public class SpringBoilerplateController {
 
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins ={"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("/preview/download")
   public Object downloadLinkFromPreview(@RequestBody DownloadPreviewRequestDto dto) {
     return springBoilerplateService.downloadBoilerplateFromUrl(dto);
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("/preview")
   public Object previewBoilerplate(@RequestBody CreateBoilerplateDto dto) {
     return springBoilerplateService.previewBoilerplate(dto);

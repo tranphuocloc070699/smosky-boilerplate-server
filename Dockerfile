@@ -6,6 +6,6 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN ./mvnw dependency:go-offline
 
-COPY src ./src
-
+# COPY src ./src
+COPY . .
 CMD ["./mvnw", "spring-boot:run"]
