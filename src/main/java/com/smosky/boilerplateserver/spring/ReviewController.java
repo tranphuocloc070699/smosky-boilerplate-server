@@ -3,6 +3,7 @@ package com.smosky.boilerplateserver.spring;
 import com.smosky.boilerplateserver.shared.AppInfoConfigDto;
 import com.smosky.boilerplateserver.shared.Constant;
 import com.smosky.boilerplateserver.shared.FileService;
+import com.smosky.boilerplateserver.shared.ResponseDto;
 import com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
 import com.smosky.boilerplateserver.spring.dtos.CreateEntityDependencyId;
@@ -63,7 +64,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/reviews")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
 public class ReviewController {
@@ -109,7 +110,14 @@ public class ReviewController {
         .fiveStar(starCountDto.getFiveStarCount())
         .build();
 
-    return createReviewResponseDto;
+
+    ResponseDto responseDto = ResponseDto.builder()
+        .path(null)
+        .status(HttpStatus.OK.value())
+        .message("fetch boilerplate successfully!")
+        .data(createReviewResponseDto)
+        .build();
+    return ResponseEntity.ok(responseDto);
   }
 
   @PostMapping("{id}")

@@ -77,27 +77,40 @@ public class BlogService {
       throw new ConflictException("Post already exists, cannot create");
     }
 
-    Post post = blogRepository.save(Post.builder()
-        .title(dto.getTitle())
-        .slug(dto.getSlug())
-        .content(dto.getContent())
-        .preContent(dto.getPreContent())
-        .thumbnail(dto.getThumbnail())
-        .build());
-    System.out.println("toc:" +dto.getToc().size());
-    for (TocDto tocDto : dto.getToc()) {
-      tocRepository.save(
-          Toc.builder().title(tocDto.getTitle()).link(tocDto.getLink()).type(tocDto.getType())
-              .post(post).build());
-    }
+    /*String slugAfterRemoveSpecialChar = dto.getSlug().trim();
 
-    ResponseDto responseDto = ResponseDto.builder()
-        .path(httpServletRequest.getServletPath())
-        .status(HttpStatus.OK.value())
-        .message("create post successfully!")
-        .data(post)
-        .build();
-    return ResponseEntity.ok(responseDto);
+    slugAfterRemoveSpecialChar=slugAfterRemoveSpecialChar.replaceFirst("^-+", "");
+    slugAfterRemoveSpecialChar=slugAfterRemoveSpecialChar.replaceFirst("-+$", "");
+    System.out.println(slugAfterRemoveSpecialChar);*/
+
+    System.out.println(dto.getSlug().trim());
+
+    try {
+      Post post = blogRepository.save(Post.builder()
+          .title(dto.getTitle())
+          .slug(dto.getSlug().trim())
+          .content(dto.getContent())
+          .preContent(dto.getPreContent())
+          .thumbnail(dto.getThumbnail())
+          .build());
+      List<Toc> tocs = new ArrayList<>();
+      for (TocDto tocDto : dto.getToc()) {
+        tocs.add(tocRepository.save(
+            Toc.builder().title(tocDto.getTitle()).link(tocDto.getLink()).type(tocDto.getType())
+                .post(post).build()));
+      }
+      post.setTocs(tocs);
+      ResponseDto responseDto = ResponseDto.builder()
+          .path(httpServletRequest.getServletPath())
+          .status(HttpStatus.OK.value())
+          .message("create post successfully!")
+          .data(post)
+          .build();
+      return ResponseEntity.ok(responseDto);
+    } catch (RuntimeException e) {
+      System.out.println(e.getMessage());
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   public ResponseEntity<ResponseDto> updatePost(Integer id, UpSavePostDto dto) {

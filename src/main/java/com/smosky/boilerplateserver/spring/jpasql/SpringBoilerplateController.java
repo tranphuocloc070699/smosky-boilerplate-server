@@ -38,7 +38,7 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 
 
 @RestController
-@RequestMapping("/spring")
+@RequestMapping("/boilerplates/spring")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
 public class SpringBoilerplateController {
