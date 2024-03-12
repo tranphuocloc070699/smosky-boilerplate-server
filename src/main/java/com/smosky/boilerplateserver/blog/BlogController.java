@@ -21,31 +21,31 @@ public class BlogController {
   private final BlogService blogService;
 
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "http://localhost:8000")
   @GetMapping("")
   ResponseEntity<ResponseDto> fetchAllPost(){
     return blogService.fetchAllPost();
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "http://localhost:8000")
   @GetMapping("{slug}")
   ResponseEntity<ResponseDto> fetchPost(@PathVariable("slug") String slug){
     return blogService.fetchPost(slug);
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "http://localhost:8000")
   @PostMapping("")
   ResponseEntity<ResponseDto> createPost(@RequestBody UpSavePostDto dto){
     return blogService.createPost(dto);
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "http://localhost:8000")
   @PutMapping("{id}")
   ResponseEntity<ResponseDto> updatePost(@PathVariable("id")String id,@RequestBody UpSavePostDto dto){
     return blogService.updatePost(Integer.parseInt(id),dto);
   }
 
-  @CrossOrigin(origins = "http://localhost:3000")
+  @CrossOrigin(origins = "http://localhost:8000")
   @DeleteMapping("{id}")
   ResponseEntity<ResponseDto> deletePost(@PathVariable("id") String id){
     return blogService.deletePost(Integer.parseInt(id));

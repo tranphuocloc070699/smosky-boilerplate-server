@@ -8,10 +8,8 @@ import com.smosky.boilerplateserver.shared.ResponseDto;
 import com.smosky.boilerplateserver.spring.BoilerplateRepository;
 import com.smosky.boilerplateserver.spring.Dependency;
 import com.smosky.boilerplateserver.spring.DependencyRepository;
-import com.smosky.boilerplateserver.spring.DependencyType;
 import com.smosky.boilerplateserver.spring.ReviewRepository;
 import com.smosky.boilerplateserver.spring.TagRepository;
-import com.smosky.boilerplateserver.spring.TypeRepository;
 import com.smosky.boilerplateserver.spring.dtos.CreateBoilerplateDto;
 import com.smosky.boilerplateserver.spring.dtos.DownloadPreviewRequestDto;
 import com.smosky.boilerplateserver.spring.jpasql.service.SpringBoilerplateService;
@@ -40,28 +38,14 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 @RestController
 @RequestMapping("/boilerplates/spring")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
+@CrossOrigin(origins = {"http://localhost:8000","https://softsky.dev","https://www.softsky.dev"})
 public class SpringBoilerplateController {
 
   private final DependencyRepository repository;
-  private final TypeRepository typeRepository;
   private final AppInfoConfigDto appInfoConfigDto;
-  private final BoilerplateRepository boilerplateRepository;
-  private final ReviewRepository reviewRepository;
-  private final FileService fileService;
-  private final TagRepository tagRepository;
-  private final DataStorage dataStorage;
   private final SpringBoilerplateService springBoilerplateService;
-  private final List<String> defaultTypes = Constant.DEFAULT_JAVA_TYPE;
   public static final String CORRELATION_ID = "X-CORRELATION-ID";
-  final int size = 100 * 1024 * 1024;
-  final ExchangeStrategies strategies = ExchangeStrategies.builder()
-      .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
-      .build();
-
-  private static final Logger logger = LoggerFactory.getLogger(SpringBoilerplateController.class);
-
-
+  
   @GetMapping("")
   public ResponseEntity<ResponseDto> fetchAllBoilerplate() {
     return springBoilerplateService.fetchAllBoilerplate();
@@ -109,7 +93,7 @@ public class SpringBoilerplateController {
   }
 
 
-  @CrossOrigin(origins ={"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
+  @CrossOrigin(origins ={"http://localhost:8000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("")
   public ResponseEntity boilerplate(@RequestBody CreateBoilerplateDto dto) {
     return springBoilerplateService.downloadBoilerplate(dto);
@@ -117,13 +101,13 @@ public class SpringBoilerplateController {
 
   }
 
-  @CrossOrigin(origins ={"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
+  @CrossOrigin(origins ={"http://localhost:8000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("/preview/download")
   public Object downloadLinkFromPreview(@RequestBody DownloadPreviewRequestDto dto) {
     return springBoilerplateService.downloadBoilerplateFromUrl(dto);
   }
 
-  @CrossOrigin(origins = {"http://localhost:3000","https://softsky.dev","https://www.softsky.dev"})
+  @CrossOrigin(origins = {"http://localhost:8000","https://softsky.dev","https://www.softsky.dev"})
   @PostMapping("/preview")
   public Object previewBoilerplate(@RequestBody CreateBoilerplateDto dto) {
     return springBoilerplateService.previewBoilerplate(dto);
@@ -140,8 +124,7 @@ public class SpringBoilerplateController {
   @GetMapping("/ci-cd")
   public Object getCiCd(@RequestHeader(CORRELATION_ID) String correlationId) {
     System.out.println(String.format(CORRELATION_ID + " found: {} ", correlationId));
-    List<DependencyType> types = typeRepository.findAllWithDependencies();
-    return types;
+    return "ci-cd";
   }
 
 

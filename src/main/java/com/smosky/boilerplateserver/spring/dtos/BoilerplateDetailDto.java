@@ -1,8 +1,7 @@
 package com.smosky.boilerplateserver.spring.dtos;
 
-import com.smosky.boilerplateserver.spring.Review;
 import java.util.List;
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

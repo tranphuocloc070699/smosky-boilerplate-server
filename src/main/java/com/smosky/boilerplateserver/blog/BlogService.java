@@ -76,15 +76,6 @@ public class BlogService {
     if (postOptional.isPresent()) {
       throw new ConflictException("Post already exists, cannot create");
     }
-
-    /*String slugAfterRemoveSpecialChar = dto.getSlug().trim();
-
-    slugAfterRemoveSpecialChar=slugAfterRemoveSpecialChar.replaceFirst("^-+", "");
-    slugAfterRemoveSpecialChar=slugAfterRemoveSpecialChar.replaceFirst("-+$", "");
-    System.out.println(slugAfterRemoveSpecialChar);*/
-
-    System.out.println(dto.getSlug().trim());
-
     try {
       Post post = blogRepository.save(Post.builder()
           .title(dto.getTitle())
@@ -108,7 +99,7 @@ public class BlogService {
           .build();
       return ResponseEntity.ok(responseDto);
     } catch (RuntimeException e) {
-      System.out.println(e.getMessage());
+      System.err.println(e.getMessage());
       throw new RuntimeException(e.getMessage());
     }
   }

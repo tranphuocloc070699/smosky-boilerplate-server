@@ -2,12 +2,11 @@ package com.smosky.boilerplateserver.spring.jpasql.service;
 
 import com.smosky.boilerplateserver.database.DataStorage;
 import com.smosky.boilerplateserver.exception.ConflictException;
-import com.smosky.boilerplateserver.exception.ResourceNotFoundException;
 import com.smosky.boilerplateserver.shared.FileService;
 import com.smosky.boilerplateserver.shared.ResponseDto;
 import com.smosky.boilerplateserver.spring.BoilerplateRepository;
 import com.smosky.boilerplateserver.spring.ReviewRepository;
-import com.smosky.boilerplateserver.spring.Tag;
+import com.smosky.boilerplateserver.spring.entity.Tag;
 import com.smosky.boilerplateserver.spring.TagRepository;
 import com.smosky.boilerplateserver.spring.dtos.*;
 import com.smosky.boilerplateserver.util.*;
@@ -39,20 +38,25 @@ public class SpringBoilerplateService {
   private final FileService fileService;
   private final DataStorage dataStorage;
   
-  public ResponseEntity<ResponseDto> fetchAllBoilerplate() {
-    var boilerplateData = boilerplateRepository.findAllWithStarCounting();
-    List<Tag> tags = tagRepository.findAll();
-    Map<String, Object> map = new HashMap<>();
-    map.put("boilerplates", boilerplateData);
-    map.put("tags", tags);
-    
-    ResponseDto responseDto = ResponseDto.builder()
-            .path(httpServletRequest.getServletPath())
-            .status(HttpStatus.OK.value())
-            .message("fetch all boilerplate successfully!")
-            .data(map)
-            .build();
-    return ResponseEntity.ok(responseDto);
+  public ResponseEntity<ResponseDto> fetchAllBoilerplate()  {
+    try {
+      var boilerplateData = boilerplateRepository.findAllWithStarCounting();
+      List<Tag> tags = tagRepository.findAll();
+      Map<String, Object> map = new HashMap<>();
+      map.put("boilerplates", boilerplateData);
+      map.put("tags", tags);
+      
+      ResponseDto responseDto = ResponseDto.builder()
+              .path(httpServletRequest.getServletPath())
+              .status(HttpStatus.OK.value())
+              .message("fetch all boilerplate successfully!")
+              .data(map)
+              .build();
+      
+      return ResponseEntity.ok(responseDto);
+    } catch (Exception exception) {
+        throw new RuntimeException(exception.getMessage());
+    }
   }
   
   public ResponseEntity<ResponseDto> fetchBoilerplateDetail(String name) {

@@ -1,9 +1,10 @@
 package com.smosky.boilerplateserver.spring;
 
-import com.smosky.boilerplateserver.spring.dtos.CreateReviewResponseDto;
 import com.smosky.boilerplateserver.spring.dtos.ReviewDto;
-import com.smosky.boilerplateserver.spring.dtos.StarCountDto;
+
 import java.util.List;
+
+import com.smosky.boilerplateserver.spring.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

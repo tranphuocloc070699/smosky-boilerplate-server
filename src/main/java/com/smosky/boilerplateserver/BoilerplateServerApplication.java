@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smosky.boilerplateserver.database.DataStorage;
 import com.smosky.boilerplateserver.spring.*;
 import java.util.Optional;
+
+import com.smosky.boilerplateserver.spring.entity.Boilerplate;
+import com.smosky.boilerplateserver.spring.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.Random;
@@ -27,13 +29,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 @EnableScheduling
 public class BoilerplateServerApplication implements CommandLineRunner {
-
-  private final DependencyRepository dependencyRepository;
-  private final PropertyRepository propertyRepository;
-
-  private final SelectOptionRepository selectOptionRepository;
-  private final LinkRepository linkRepository;
-  private final TypeRepository typeRepository;
   private final BoilerplateRepository boilerplateRepository;
   private final TagRepository tagRepository;
   private final DataStorage dataStorage;
@@ -94,10 +89,6 @@ public class BoilerplateServerApplication implements CommandLineRunner {
     String jsonString = getSpringJsonObject("original.json");
     JsonNode nodes = objectMapper.readTree(jsonString).path("dependencies");
     for (JsonNode node : nodes) {
-/*      DependencyType type = typeRepository.save(
-
-      );*/
-
       DependencyType type = DependencyType.builder()
           .id(dataStorage.getDependencyTypes().size() + 1)
           .name(node.path("name").asText())
@@ -193,71 +184,9 @@ public class BoilerplateServerApplication implements CommandLineRunner {
               .url(node.path("href").asText())
           .build());
     }
-
     dependency.setLinks(links);
-
-
-
-   /* linkRepository.save(
-        Link.builder()
-            .name("maven")
-            .title("Maven")
-            .url("")
-            .dependency(dependency)
-            .build()
-    );
-    linkRepository.save(
-        Link.builder()
-            .name("github")
-            .title("Github")
-            .url("")
-            .dependency(dependency)
-            .build()
-    );
-    linkRepository.save(
-        Link.builder()
-            .name("homepage")
-            .title("Homepage")
-            .url("")
-            .dependency(dependency)
-            .build()
-    );
-    linkRepository.save(
-        Link.builder()
-            .name("gradle")
-            .title("Gradle")
-            .url("")
-            .dependency(dependency)
-            .build()
-    );*/
   }
-
-  /*private void saveSpringProperties(JsonNode nodes, Dependency dependency) {
-    if (!nodes.isArray()) {
-      return;
-    }
-    for (JsonNode node : nodes) {
-      Property property = propertyRepository.save(
-          Property.builder().id(node.path("id").asText())
-              .value(node.path("value").asText()).title(
-                  node.path("title").asText()).toolTip(node.path("toolTip").asText())
-              .dependency(dependency).build());
-
-      saveSpringSelectOptions(node.path("options"), property);
-    }
-  }
-
-  private void saveSpringSelectOptions(JsonNode nodes, Property property) {
-    if (!nodes.isArray()) {
-      return;
-    }
-    for (JsonNode node : nodes) {
-      selectOptionRepository.save(
-          SelectOption.builder().label(node.path("label").asText())
-              .value(node.path("value").asText()).property(property).build());
-    }
-  }*/
-
+  
   private String getSpringJsonObject(String path) {
     ClassPathResource resource = new ClassPathResource(path);
     Path filePath = null;
