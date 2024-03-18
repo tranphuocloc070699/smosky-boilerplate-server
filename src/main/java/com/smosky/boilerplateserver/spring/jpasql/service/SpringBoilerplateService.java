@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -98,6 +99,30 @@ public class SpringBoilerplateService {
     return uniqueList;
   }
   
+  public Object downloadBoilerplateFromUrl(DownloadPreviewRequestDto dto) {
+    InputStreamResource resource = null;
+    try {
+      System.out.println("Url:" + dto.getDownloadUrl());
+      resource = new InputStreamResource(
+              new FileInputStream(dto.getDownloadUrl()));
+      
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+      headers.setContentDispositionFormData("attachment", "file.zip");
+      InputStream inputStream = new ByteArrayInputStream(
+              resource.getInputStream().readAllBytes());
+      
+      
+      
+      return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
+    } catch (IOException | RuntimeException e) {
+      System.out.println(e.getMessage());
+      throw new RuntimeException(e);
+    }
+  }
+  
+
+  
   
   public ResponseEntity downloadBoilerplate(CreateBoilerplateDto dto) {
     String randomName = dto.getMetadata().getName() + "-" + UUID.randomUUID();
@@ -150,24 +175,26 @@ public class SpringBoilerplateService {
       if (responseBody != null) {
         // Save the response to a file (my-project.zip)
           /* Write .zip file from start.spring.io to folder */
-        System.out.println("Get reponse not null");
-          getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
 
-        System.out.println("get file success");
+          getFile(dto, zipFileName, responseBody, extractFileName, zipFileResponse);
+          
           Map<String, Object> map = new HashMap<>();
           map.put("projectStructure", fileService.getNode(new File(extractFileName)));
           map.put("downloadUrl", zipFileResponse);
-          return ResponseEntity.ok(map);
+        ResponseDto responseDto = ResponseDto.builder()
+                .path(httpServletRequest.getServletPath())
+                .status(HttpStatus.OK.value())
+                .message("fetch boilerplate successfully!")
+                .data(map)
+                .build();
+          return ResponseEntity.ok(responseDto);
       } else {
         throw new ConflictException("Fail to download");
       }
     }catch (RuntimeException | IOException e){
       throw new RuntimeException(e.getMessage());
     }
-
   }
-  
-  
   private String getString(CreateBoilerplateDto dto, StringBuilder dependencies) {
     MetadataDto metadataDto = dto.getMetadata();
     String apiUrl = "https://start.spring.io/starter.zip";
@@ -203,7 +230,7 @@ public class SpringBoilerplateService {
     dependencies.delete(0, 1);
     
     String urlString = getString(dto, dependencies);
-    System.out.println(urlString);
+
     WebClient webClient = WebClient.create();
     try {
       return webClient.get()
@@ -217,35 +244,21 @@ public class SpringBoilerplateService {
     }
   }
   
-  public Object downloadBoilerplateFromUrl(DownloadPreviewRequestDto dto) {
-    InputStreamResource resource = null;
-    try {
-      resource = new InputStreamResource(
-              new FileInputStream(dto.getDownloadUrl()));
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-      headers.setContentDispositionFormData("attachment", "file");
-      InputStream inputStream = new ByteArrayInputStream(
-              resource.getInputStream().readAllBytes());
-      return new ResponseEntity<>(new InputStreamResource(inputStream), headers, HttpStatus.OK);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
+
   
   private ZipFile getFile(CreateBoilerplateDto dto, String zipFileName, byte[] responseBody,
                           String extractFileName, String zipFileResponse) throws IOException {
     try {
 
       /* Write .zip file from start.spring.io to folder */
-      System.out.println("write file processing...");
+
       Files.write(Path.of(zipFileName), responseBody);
 
       /* Extract .zip file */
       ZipFile zipFile = new ZipFile(zipFileName);
       zipFile.extractAll(extractFileName);
 
-      System.out.println("extract all success");
+
       /*
        * Validate value
        * */

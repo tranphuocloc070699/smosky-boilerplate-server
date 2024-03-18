@@ -17,11 +17,11 @@ public interface BoilerplateRepository extends JpaRepository<Boilerplate, Intege
   @Query(
       "SELECT new com.smosky.boilerplateserver.spring.dtos.BoilerplateDetailDto (b.id, b.name,b.thumbnail,b.previewLink ,b.description, "
           + "COUNT(DISTINCT r),COALESCE(AVG(r.star),0) , "
-          + "COUNT(DISTINCT CASE WHEN r.star = 1 THEN 1 ELSE null END) AS star1Count, "
-          + "COUNT(DISTINCT CASE WHEN r.star = 2 THEN 1 ELSE null END) AS star2Count, "
-          + "COUNT(DISTINCT CASE WHEN r.star = 3 THEN 1 ELSE null END) AS star3Count, "
-          + "COUNT(DISTINCT CASE WHEN r.star = 4 THEN 1 ELSE null END) AS star4Count, "
-          + "COUNT(DISTINCT CASE WHEN r.star = 5 THEN 1 ELSE null END) AS star5Count, "
+          + "SUM(DISTINCT CASE WHEN r.star = 1 THEN 1 ELSE null END) AS star1Count, "
+          + "SUM(DISTINCT CASE WHEN r.star = 2 THEN 1 ELSE null END) AS star2Count, "
+          + "SUM(DISTINCT CASE WHEN r.star = 3 THEN 1 ELSE null END) AS star3Count, "
+          + "SUM(DISTINCT CASE WHEN r.star = 4 THEN 1 ELSE null END) AS star4Count, "
+          + "SUM(DISTINCT CASE WHEN r.star = 5 THEN 1 ELSE null END) AS star5Count, "
           + "STRING_AGG(dep, ', ') AS dependencies ," + "STRING_AGG(f, ', ') AS features ) "
           + "FROM Boilerplate b " + "LEFT JOIN b.reviews r " + "LEFT JOIN b.dependencies dep "
           + "LEFT JOIN b.features f " + "WHERE b.name = :name "
@@ -39,11 +39,11 @@ public interface BoilerplateRepository extends JpaRepository<Boilerplate, Intege
       "SELECT new com.smosky.boilerplateserver.spring.dtos.CreateReviewResponseDto(r.id,r.email,r.name,r.content,r.star,r.createdAt,r.updatedAt,"
           + "COUNT(DISTINCT r),"
           + "COALESCE(AVG(r.star),0),"
-          + "COUNT(DISTINCT CASE WHEN r.star = 1 THEN 1 ELSE null END) AS oneStar,"
-          + "COUNT(DISTINCT CASE WHEN r.star = 2 THEN 1 ELSE null END) AS twoStar,"
-          + "COUNT(DISTINCT CASE WHEN r.star = 3 THEN 1 ELSE null END) AS threeStar,"
-          + "COUNT(DISTINCT CASE WHEN r.star = 4 THEN 1 ELSE null END) AS fourStar,"
-          + "COUNT(DISTINCT CASE WHEN r.star = 5 THEN 1 ELSE null END) AS fiveStar) "
+          + "SUM( CASE WHEN r.star = 1 THEN 1 ELSE null END) AS oneStar,"
+          + "SUM( CASE WHEN r.star = 2 THEN 1 ELSE null END) AS twoStar,"
+          + "SUM( CASE WHEN r.star = 3 THEN 1 ELSE null END) AS threeStar,"
+          + "SUM( CASE WHEN r.star = 4 THEN 1 ELSE null END) AS fourStar,"
+          + "SUM( CASE WHEN r.star = 5 THEN 1 ELSE null END) AS fiveStar) "
           + "FROM Boilerplate b "
           + "LEFT JOIN b.reviews r "
           + "WHERE b.id=:id "
@@ -56,11 +56,11 @@ public interface BoilerplateRepository extends JpaRepository<Boilerplate, Intege
       "SELECT NEW com.smosky.boilerplateserver.spring.dtos.StarCountDto(" +
           "COUNT(DISTINCT r) AS totalReviews, " +
           "COALESCE(AVG(r.star),0), " +
-          "COUNT(DISTINCT CASE WHEN r.star = 5 THEN r.id ELSE null END) AS fiveStarCount, " +
-          "COUNT(DISTINCT CASE WHEN r.star = 4 THEN r.id ELSE null END) AS fourStarCount, " +
-          "COUNT(DISTINCT CASE WHEN r.star = 3 THEN r.id ELSE null END) AS threeStarCount, " +
-          "COUNT(DISTINCT CASE WHEN r.star = 2 THEN r.id ELSE null END) AS twoStarCount, " +
-          "COUNT(DISTINCT CASE WHEN r.star = 1 THEN r.id ELSE null END) AS oneStarCount) " +
+          "SUM(DISTINCT CASE WHEN r.star = 5 THEN r.id ELSE null END) AS fiveStarCount, " +
+          "SUM(DISTINCT CASE WHEN r.star = 4 THEN r.id ELSE null END) AS fourStarCount, " +
+          "SUM(DISTINCT CASE WHEN r.star = 3 THEN r.id ELSE null END) AS threeStarCount, " +
+          "SUM(DISTINCT CASE WHEN r.star = 2 THEN r.id ELSE null END) AS twoStarCount, " +
+          "SUM(DISTINCT CASE WHEN r.star = 1 THEN r.id ELSE null END) AS oneStarCount) " +
           "FROM Boilerplate b " +
           "LEFT JOIN b.reviews r " +
           "WHERE b.id = :id"

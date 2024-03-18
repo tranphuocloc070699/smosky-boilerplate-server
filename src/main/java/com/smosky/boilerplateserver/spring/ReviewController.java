@@ -28,7 +28,6 @@ public class ReviewController {
   @PostMapping("")
   @CrossOrigin(origins = {"http://localhost:8000","https://softsky.dev","https://www.softsky.dev"})
   public Object createReview(@RequestBody CreateReviewDto dto) {
-    System.out.println(dto.getBoilerplateId());
     if (dto.getName().isEmpty() || dto.getBoilerplateId() == null) {
       return null;
     }
@@ -68,7 +67,7 @@ public class ReviewController {
     ResponseDto responseDto = ResponseDto.builder()
         .path(null)
         .status(HttpStatus.OK.value())
-        .message("fetch boilerplate successfully!")
+        .message("create review successfully!")
         .data(createReviewResponseDto)
         .build();
     return ResponseEntity.ok(responseDto);
